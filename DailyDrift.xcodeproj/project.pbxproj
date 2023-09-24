@@ -15,6 +15,8 @@
 		1BB691C12AC04347008CE2FE /* DailyDriftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691C02AC04347008CE2FE /* DailyDriftUITests.swift */; };
 		1BB691C32AC04347008CE2FE /* DailyDriftUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691C22AC04347008CE2FE /* DailyDriftUITestsLaunchTests.swift */; };
 		1BB691D02AC049D0008CE2FE /* NewEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691CF2AC049D0008CE2FE /* NewEntryView.swift */; };
+		1BB691D22AC04D7A008CE2FE /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691D12AC04D7A008CE2FE /* Entry.swift */; };
+		1BB691D42AC04DE7008CE2FE /* EntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691D32AC04DE7008CE2FE /* EntryStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +48,8 @@
 		1BB691C02AC04347008CE2FE /* DailyDriftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyDriftUITests.swift; sourceTree = "<group>"; };
 		1BB691C22AC04347008CE2FE /* DailyDriftUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyDriftUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		1BB691CF2AC049D0008CE2FE /* NewEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEntryView.swift; sourceTree = "<group>"; };
+		1BB691D12AC04D7A008CE2FE /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
+		1BB691D32AC04DE7008CE2FE /* EntryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +105,8 @@
 				1BB691A92AC04346008CE2FE /* Assets.xcassets */,
 				1BB691AB2AC04346008CE2FE /* Preview Content */,
 				1BB691CF2AC049D0008CE2FE /* NewEntryView.swift */,
+				1BB691D12AC04D7A008CE2FE /* Entry.swift */,
+				1BB691D32AC04DE7008CE2FE /* EntryStore.swift */,
 			);
 			path = DailyDrift;
 			sourceTree = "<group>";
@@ -260,6 +266,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BB691D22AC04D7A008CE2FE /* Entry.swift in Sources */,
+				1BB691D42AC04DE7008CE2FE /* EntryStore.swift in Sources */,
 				1BB691D02AC049D0008CE2FE /* NewEntryView.swift in Sources */,
 				1BB691A82AC04345008CE2FE /* ContentView.swift in Sources */,
 				1BB691A62AC04345008CE2FE /* DailyDriftApp.swift in Sources */,

@@ -7,13 +7,6 @@
 
 import SwiftUI
 
-struct Entry: Identifiable {
-    var id = UUID()
-    var date: Date
-    var title: String
-    var content: String
-}
-
 let sampleEntries : [Entry] = [
     Entry(date: Date(timeIntervalSinceNow: -86400*6), title: "Monday Feels", content: "Just another monday... You know, today was actually not that bad. Got a ton of work done, did some hanging out with my cat, had a good meal. Overall it was a pretty great day!"),
     Entry(date: Date(timeIntervalSinceNow: -86400*5), title: "Thoughts", content: "Consciousness is pretty crazy, can't think about it for too long..."),
@@ -21,11 +14,11 @@ let sampleEntries : [Entry] = [
 ]
 
 struct ContentView: View {
-    var entries: [Entry] = sampleEntries
+    @ObservedObject var entryStore = EntryStore(entries: sampleEntries)
     
     var body: some View {
         NavigationView {
-            List(entries) { entry in
+            List(entryStore.entries, id: \.self) { entry in
                 VStack(alignment: .leading) {
                     Text(entry.title).font(.headline)
                     Text(entry.content).font(.subheadline).lineLimit(1)
