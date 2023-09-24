@@ -23,6 +23,7 @@ class EntryStore: ObservableObject {
     
     func add(_ entry: Entry) {
         entries.append(entry)
+        originalEntries.append(entry)
     }
     
     func remove(at offsets: IndexSet) {
