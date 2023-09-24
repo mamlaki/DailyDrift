@@ -53,25 +53,25 @@ struct ContentView: View {
             }
             .navigationTitle("Journal Entries")
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Menu {
-                        Button("Date (Default)", action: {
-                            selectedSortOption = .date
-                            entryStore.resetToDefaultOrder()
-                        })
-                        Button("Title", action: {
-                            selectedSortOption = .title
-                            entryStore.sortByTitle()
-                        })
-                    } label: {
-                        Image(systemName: "line.3.horizontal.decrease.circle")
-                    }
-                }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {
-                        showingNewEntryView = true
-                    }) {
-                        Image(systemName: "plus")
+                    HStack() {
+                        Menu {
+                            Button("Date (Default)", action: {
+                                selectedSortOption = .date
+                                entryStore.resetToDefaultOrder()
+                            })
+                            Button("Title", action: {
+                                selectedSortOption = .title
+                                entryStore.sortByTitle()
+                            })
+                        } label: {
+                            Image(systemName: "line.3.horizontal.decrease.circle")
+                        }
+                        Button(action: {
+                            showingNewEntryView = true
+                        }) {
+                            Image(systemName: "plus")
+                        }
                     }
                 }
             }
