@@ -15,9 +15,13 @@ let sampleEntries : [Entry] = [
 
 struct ContentView: View {
     @State private var showingNewEntryView = false
-    @State private var isSortedByTitle = false
+    @State private var selectedSortOption: SortOption = .date
     @ObservedObject var entryStore = EntryStore(entries: sampleEntries)
  
+    enum SortOption {
+        case date, title
+    }
+    
     func deleteEntry(at offsets: IndexSet) {
         entryStore.remove(at: offsets)
     }
@@ -50,15 +54,17 @@ struct ContentView: View {
             .navigationTitle("Journal Entries")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(action: {
-                        isSortedByTitle.toggle()
-                        if isSortedByTitle {
-                            entryStore.sortByTitle()
-                        } else {
+                    Menu {
+                        Button("Date (Default)", action: {
+                            selectedSortOption = .date
                             entryStore.resetToDefaultOrder()
-                        }
-                    }) {
-                        Image(systemName: "arrow.up.arrow.down.circle.fill")
+                        })
+                        Button("Title", action: {
+                            selectedSortOption = .title
+                            entryStore.sortByTitle()
+                        })
+                    } label: {
+                        Image(systemName: "line.3.horizontal.decrease.circle")
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
