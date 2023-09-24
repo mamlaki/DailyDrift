@@ -21,14 +21,18 @@ let sampleEntries : [Entry] = [
 ]
 
 struct ContentView: View {
+    var entries: [Entry] = sampleEntries
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationView {
+            List(entries) { entry in
+                VStack(alignment: .leading) {
+                    Text(entry.title).font(.headline)
+                    Text(entry.content).font(.subheadline).lineLimit(1)
+                }
+            }
+            .navigationTitle("Journal Entries")
         }
-        .padding()
     }
 }
 
