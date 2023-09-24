@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Entry: Identifiable, Hashable {
+struct Entry: Identifiable, Hashable, Codable {
     var id = UUID()
     var date: Date
     var title: String

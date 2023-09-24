@@ -36,7 +36,7 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showingNewEntryView) {
-                NewEntryView(entryStore: entryStore)
+                NewEntryView(entryStore: self.entryStore)
             }
         }
     }
