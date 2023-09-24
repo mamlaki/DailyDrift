@@ -14,8 +14,11 @@ class EntryStore: ObservableObject {
         }
     }
     
+    private var originalEntries : [Entry] = []
+    
     init(entries: [Entry] = []) {
         self.entries = entries
+        self.originalEntries = entries
     }
     
     func add(_ entry: Entry) {
@@ -24,6 +27,14 @@ class EntryStore: ObservableObject {
     
     func remove(at offsets: IndexSet) {
         entries.remove(atOffsets: offsets)
+    }
+    
+    func sortByTitle() {
+        entries.sort { $0.title < $1.title}
+    }
+    
+    func resetToDefaultOrder() {
+        entries = originalEntries
     }
     
     private func saveToUserDefaults() {

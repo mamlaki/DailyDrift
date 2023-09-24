@@ -15,6 +15,7 @@ let sampleEntries : [Entry] = [
 
 struct ContentView: View {
     @State private var showingNewEntryView = false
+    @State private var isSortedByTitle = false
     @ObservedObject var entryStore = EntryStore(entries: sampleEntries)
  
     func deleteEntry(at offsets: IndexSet) {
@@ -48,6 +49,18 @@ struct ContentView: View {
             }
             .navigationTitle("Journal Entries")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(action: {
+                        isSortedByTitle.toggle()
+                        if isSortedByTitle {
+                            entryStore.sortByTitle()
+                        } else {
+                            entryStore.resetToDefaultOrder()
+                        }
+                    }) {
+                        Image(systemName: "arrow.up.arrow.down.circle.fill")
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
                         showingNewEntryView = true
