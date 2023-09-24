@@ -22,6 +22,10 @@ class EntryStore: ObservableObject {
         entries.append(entry)
     }
     
+    func remove(at offsets: IndexSet) {
+        entries.remove(atOffsets: offsets)
+    }
+    
     private func saveToUserDefaults() {
         if let encodedData = try? JSONEncoder().encode(entries) {
             UserDefaults.standard.set(encodedData, forKey: "entries")

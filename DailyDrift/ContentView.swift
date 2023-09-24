@@ -16,14 +16,21 @@ let sampleEntries : [Entry] = [
 struct ContentView: View {
     @State private var showingNewEntryView = false
     @ObservedObject var entryStore = EntryStore(entries: sampleEntries)
+ 
+    func deleteEntry(at offsets: IndexSet) {
+        entryStore.remove(at: offsets)
+    }
     
     var body: some View {
         NavigationView {
-            List(entryStore.entries, id: \.self) { entry in
-                VStack(alignment: .leading) {
-                    Text(entry.title).font(.headline)
-                    Text(entry.content).font(.subheadline).lineLimit(1)
+            List {
+                ForEach(entryStore.entries, id: \.self) { entry in
+                    VStack(alignment: .leading) {
+                        Text(entry.title).font(.headline)
+                        Text(entry.content).font(.subheadline).lineLimit(1)
+                    }
                 }
+                .onDelete(perform: deleteEntry)
             }
             .navigationTitle("Journal Entries")
             .toolbar {
