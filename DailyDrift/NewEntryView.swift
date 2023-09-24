@@ -10,7 +10,7 @@ import SwiftUI
 struct NewEntryView: View {
     @State private var title = ""
     @State private var content = ""
-    @Binding var entries: [Entry]
+    @ObservedObject var entryStore: EntryStore
     
     var body: some View {
         Form {
@@ -18,7 +18,7 @@ struct NewEntryView: View {
             TextEditor(text: $content)
             Button("Save") {
                 let newEntry = Entry(date: Date(), title: title, content: content)
-                entries.append(newEntry)
+                entryStore.add(newEntry)
             }
         }
     }
