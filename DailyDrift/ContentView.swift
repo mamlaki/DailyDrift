@@ -25,10 +25,24 @@ struct ContentView: View {
         NavigationView {
             List {
                 ForEach(entryStore.entries, id: \.self) { entry in
-                    VStack(alignment: .leading) {
-                        Text(entry.title).font(.headline)
-                        Text(entry.content).font(.subheadline).lineLimit(1)
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(entry.title).font(.headline)
+                            Text(entry.content).font(.subheadline).lineLimit(1)
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            if let index = entryStore.entries.firstIndex(of: entry) {
+                                entryStore.remove(at: [index])
+                            }
+                        }) {
+                            Image(systemName: "trash")
+                                .foregroundStyle(.red)
+                        }
                     }
+                    
                 }
                 .onDelete(perform: deleteEntry)
             }
