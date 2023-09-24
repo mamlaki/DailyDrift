@@ -14,6 +14,7 @@ let sampleEntries : [Entry] = [
 ]
 
 struct ContentView: View {
+    @State private var showingNewEntryView = false
     @ObservedObject var entryStore = EntryStore(entries: sampleEntries)
     
     var body: some View {
@@ -25,6 +26,18 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Journal Entries")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: {
+                        showingNewEntryView = true
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $showingNewEntryView) {
+                NewEntryView(entryStore: entryStore)
+            }
         }
     }
 }
