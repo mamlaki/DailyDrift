@@ -14,6 +14,7 @@
 		1BB691B72AC04347008CE2FE /* DailyDriftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691B62AC04347008CE2FE /* DailyDriftTests.swift */; };
 		1BB691C12AC04347008CE2FE /* DailyDriftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691C02AC04347008CE2FE /* DailyDriftUITests.swift */; };
 		1BB691C32AC04347008CE2FE /* DailyDriftUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691C22AC04347008CE2FE /* DailyDriftUITestsLaunchTests.swift */; };
+		1BB691D02AC049D0008CE2FE /* NewEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691CF2AC049D0008CE2FE /* NewEntryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		1BB691BC2AC04347008CE2FE /* DailyDriftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DailyDriftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BB691C02AC04347008CE2FE /* DailyDriftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyDriftUITests.swift; sourceTree = "<group>"; };
 		1BB691C22AC04347008CE2FE /* DailyDriftUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyDriftUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		1BB691CF2AC049D0008CE2FE /* NewEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEntryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 				1BB691A72AC04345008CE2FE /* ContentView.swift */,
 				1BB691A92AC04346008CE2FE /* Assets.xcassets */,
 				1BB691AB2AC04346008CE2FE /* Preview Content */,
+				1BB691CF2AC049D0008CE2FE /* NewEntryView.swift */,
 			);
 			path = DailyDrift;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BB691D02AC049D0008CE2FE /* NewEntryView.swift in Sources */,
 				1BB691A82AC04345008CE2FE /* ContentView.swift in Sources */,
 				1BB691A62AC04345008CE2FE /* DailyDriftApp.swift in Sources */,
 			);
