@@ -27,6 +27,9 @@ class EntryStore: ObservableObject {
     }
     
     func remove(at offsets: IndexSet) {
+        if let firstOffset = offsets.first {
+            originalEntries.removeAll { $0 == entries[firstOffset] }
+        }
         entries.remove(atOffsets: offsets)
     }
     
