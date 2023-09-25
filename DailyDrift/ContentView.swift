@@ -18,6 +18,7 @@ struct ContentView: View {
     @State private var selectedSortOption: SortOption = .date
     @State private var searchText = ""
     @ObservedObject var entryStore = EntryStore(entries: sampleEntries)
+    @Environment(\.colorScheme) var colorScheme
     
     func deleteEntry(at offsets: IndexSet) {
         entryStore.remove(at: offsets)
@@ -28,14 +29,20 @@ struct ContentView: View {
     }
     
     var filteredEntries: [Entry] {
+        let nonPinnedEntries = entryStore.entries.filter { !$0.isPinned }
+        
         if searchText.isEmpty {
-            return entryStore.entries
+            return nonPinnedEntries
         } else {
-            return entryStore.entries.filter { entry in
+            return nonPinnedEntries.filter { entry in
                 entry.title.lowercased().contains(searchText.lowercased()) ||
                 entry.content.lowercased().contains(searchText.lowercased())
             }
         }
+    }
+    
+    var pinnedEntries: [Entry] {
+        return entryStore.entries.filter { $0.isPinned }
     }
     
     var body: some View {
@@ -43,29 +50,42 @@ struct ContentView: View {
             VStack {
                 SearchBar(text: $searchText)
                 List {
-                    ForEach(filteredEntries, id: \.self) { entry in
-                        NavigationLink(destination: EntryDetailView(entryStore: self.entryStore, entryIndex: entryStore.entries.firstIndex(of: entry)!)) {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text(entry.title).font(.headline)
-                                    Text(entry.content).font(.subheadline).lineLimit(1)
-                                }
-                                
-                                Spacer()
-                                
-                                Button(action: {
-                                    if let index = entryStore.entries.firstIndex(of: entry) {
-                                        entryStore.remove(at: [index])
+                    if !pinnedEntries.isEmpty {
+                        Section(header: Text("Pinned Entries")) {
+                            ForEach(pinnedEntries, id: \.self) { entry in
+                                entryRow(for: entry)
+                                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                                        Button(action: {
+                                            if let index = entryStore.entries.firstIndex(of: entry) {
+                                                entryStore.entries[index].isPinned.toggle()
+                                            }
+                                        }) {
+                                            Label("Unpin", systemImage: "pin.slash")
+                                        }
+                                        .tint((colorScheme == .light ? Color.yellow : Color.orange))
                                     }
-                                }) {
-                                    Image(systemName: "trash")
-                                        .foregroundStyle(.red)
-                                }
                             }
+                            .onDelete(perform: deleteEntry)
                         }
-                        .buttonStyle(PlainButtonStyle())
+                        
                     }
-                    .onDelete(perform: deleteEntry)
+                    
+                    Section(header: Text("All Entries")) {
+                        ForEach(filteredEntries, id: \.self) { entry in
+                            entryRow(for: entry)
+                                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                                    Button(action: {
+                                        if let index = entryStore.entries.firstIndex(of: entry) {
+                                            entryStore.entries[index].isPinned.toggle()
+                                        }
+                                    }) {
+                                        Label("Pin", systemImage: "pin")
+                                    }
+                                    .tint((colorScheme == .light ? Color.yellow : Color.orange))
+                                }
+                        }
+                        .onDelete(perform: deleteEntry)
+                    }
                 }
             }
             .navigationTitle("Journal Entries")
@@ -112,6 +132,40 @@ struct ContentView: View {
                 NewEntryView(entryStore: self.entryStore, isPresented: $showingNewEntryView)
             }
         }
+    }
+    
+    func entryRow(for entry: Entry) -> some View {
+        NavigationLink(destination: EntryDetailView(entryStore: self.entryStore, entryIndex: entryStore.entries.firstIndex(of: entry)!)) {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(entry.title).font(.headline)
+                    Text(entry.content).font(.subheadline).lineLimit(1)
+                }
+                Spacer()
+                Menu {
+                    Button(action: {
+                        if let index = entryStore.entries.firstIndex(of: entry) {
+                            entryStore.entries[index].isPinned.toggle()
+                        }
+                    }) {
+                        Label(
+                            entry.isPinned ? "Unpin" : "Pin",
+                            systemImage: entry.isPinned ? "pin.slash" : "pin"
+                        )
+                    }
+                    Button(action: {
+                        if let index = entryStore.entries.firstIndex(of: entry) {
+                            entryStore.remove(at: [index])
+                        }
+                    }) {
+                        Label("Delete", systemImage: "trash")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 

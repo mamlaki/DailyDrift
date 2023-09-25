@@ -12,6 +12,7 @@ struct Entry: Identifiable, Hashable, Codable {
     var date: Date
     var title: String
     var content: String
+    var isPinned: Bool = false
     
     var formattedDate: String {
         let formatter = DateFormatter()

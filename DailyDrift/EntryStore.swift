@@ -14,7 +14,7 @@ class EntryStore: ObservableObject {
         }
     }
     
-    private var originalEntries : [Entry] = []
+    private var originalEntries : [Entry]
     
     init(entries: [Entry] = []) {
         self.entries = entries
@@ -44,11 +44,19 @@ class EntryStore: ObservableObject {
     }
     
     func sortByTitle() {
+        let currentPinStatuses = Dictionary(uniqueKeysWithValues: entries.map { ($0.id, $0.isPinned) })
         entries.sort { $0.title < $1.title}
+        for index in entries.indices {
+            entries[index].isPinned = currentPinStatuses[entries[index].id] ?? false
+        }
     }
     
     func resetToDefaultOrder() {
+        let currentPinStatuses = Dictionary(uniqueKeysWithValues: entries.map { ($0.id, $0.isPinned) })
         entries = originalEntries.sorted(by: {$0.date > $1.date })
+        for index in entries.indices {
+            entries[index].isPinned = currentPinStatuses[entries[index].id] ?? false
+        }
     }
     
     private func saveToUserDefaults() {
