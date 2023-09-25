@@ -11,6 +11,7 @@ struct NewEntryView: View {
     @State private var title = ""
     @State private var content = ""
     @ObservedObject var entryStore: EntryStore
+    @Binding var isPresented: Bool
     
     var body: some View {
         Form {
@@ -25,10 +26,12 @@ struct NewEntryView: View {
                 TextEditor(text: $content)
             }
             
-            Button("Save") {
+            Button("Add") {
                 let newEntry = Entry(date: Date(), title: title, content: content)
                 entryStore.add(newEntry)
+                isPresented = false
             }
+            .disabled(title.isEmpty || content.isEmpty)
         }
     }
 }
