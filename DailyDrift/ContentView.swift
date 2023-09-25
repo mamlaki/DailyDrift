@@ -141,6 +141,7 @@ struct ContentView: View {
                 VStack(alignment: .leading) {
                     Text(entry.title).font(.headline)
                     Text(entry.content).font(.subheadline).lineLimit(1)
+                    Text(entry.formattedDate).font(.caption).foregroundStyle(.gray)
                 }
                 Spacer()
                 Menu {
