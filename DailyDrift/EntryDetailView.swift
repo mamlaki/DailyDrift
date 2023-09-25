@@ -13,6 +13,7 @@ struct EntryDetailView: View {
     @State private var isEditing = false
     @State private var editedTitle: String
     @State private var editedContent: String
+    @EnvironmentObject var fontManager: FontManager
     
     init(entryStore: EntryStore, entryIndex: Int) {
         self.entryStore = entryStore
@@ -37,17 +38,15 @@ struct EntryDetailView: View {
                 TextEditor(text: $editedContent)
                     .font(.body)
             } else {
-                Text(formattedDate)
-                    .font(.subheadline)
-                    .foregroundStyle(.gray)
-                    .padding(.bottom, 5)
                 
-                Text(entryStore.entries[entryIndex].title)
-                    .font(.headline)
+                CustomFontText(formattedDate, style: .subheadline, customFontName: fontManager.currentFontName)
+                    .padding(.bottom, 5)
+                    .foregroundStyle(.gray)
+                
+                CustomFontText(entryStore.entries[entryIndex].title, style: .headline, customFontName: fontManager.currentFontName)
                     .padding(.bottom, 10)
                 
-                Text(entryStore.entries[entryIndex].content)
-                    .font(.body)
+                CustomFontText(entryStore.entries[entryIndex].content, style: .body, customFontName: fontManager.currentFontName)
             }
                 Spacer()
         }
@@ -69,5 +68,13 @@ struct EntryDetailView: View {
                 }
             }
         }
+    }
+}
+
+
+struct MainView2_Previews: PreviewProvider {
+    static var previews: some View {
+        MainView()
+            .environmentObject(FontManager())
     }
 }

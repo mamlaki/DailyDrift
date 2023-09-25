@@ -19,6 +19,7 @@ struct ContentView: View {
     @State private var searchText = ""
     @ObservedObject var entryStore = EntryStore(entries: sampleEntries)
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var fontManager: FontManager
     
     func deleteEntry(at offsets: IndexSet) {
         entryStore.remove(at: offsets)
@@ -88,7 +89,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationTitle("Journal Entries")
+            .navigationTitle("DailyDrift")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack() {

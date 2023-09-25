@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct DailyDriftApp: App {
+    var fontManager = FontManager()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
+                .environmentObject(fontManager)
         }
     }
 }
