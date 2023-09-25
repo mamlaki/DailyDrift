@@ -16,47 +16,62 @@ let sampleEntries : [Entry] = [
 struct ContentView: View {
     @State private var showingNewEntryView = false
     @State private var selectedSortOption: SortOption = .date
+    @State private var searchText = ""
     @ObservedObject var entryStore = EntryStore(entries: sampleEntries)
- 
-    enum SortOption {
-        case date, title
-    }
     
     func deleteEntry(at offsets: IndexSet) {
         entryStore.remove(at: offsets)
     }
     
+    enum SortOption {
+        case date, title
+    }
+    
+    var filteredEntries: [Entry] {
+        if searchText.isEmpty {
+            return entryStore.entries
+        } else {
+            return entryStore.entries.filter { entry in
+                entry.title.lowercased().contains(searchText.lowercased()) ||
+                entry.content.lowercased().contains(searchText.lowercased())
+            }
+        }
+    }
+    
     var body: some View {
         NavigationView {
-            List {
-                ForEach(entryStore.entries, id: \.self) { entry in
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(entry.title).font(.headline)
-                            Text(entry.content).font(.subheadline).lineLimit(1)
-                        }
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            if let index = entryStore.entries.firstIndex(of: entry) {
-                                entryStore.remove(at: [index])
+            VStack {
+                SearchBar(text: $searchText)
+                List {
+                    ForEach(filteredEntries, id: \.self) { entry in
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(entry.title).font(.headline)
+                                Text(entry.content).font(.subheadline).lineLimit(1)
                             }
-                        }) {
-                            Image(systemName: "trash")
-                                .foregroundStyle(.red)
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                if let index = entryStore.entries.firstIndex(of: entry) {
+                                    entryStore.remove(at: [index])
+                                }
+                            }) {
+                                Image(systemName: "trash")
+                                    .foregroundStyle(.red)
+                            }
                         }
+                        
                     }
-                    
+                    .onDelete(perform: deleteEntry)
                 }
-                .onDelete(perform: deleteEntry)
             }
             .navigationTitle("Journal Entries")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack() {
                         Menu {
-                            Button("Date (Default)", action: {
+                            Button("Recently Added (Default)", action: {
                                 selectedSortOption = .date
                                 entryStore.resetToDefaultOrder()
                             })
@@ -79,6 +94,25 @@ struct ContentView: View {
                 NewEntryView(entryStore: self.entryStore)
             }
         }
+    }
+}
+
+struct SearchBar: View {
+    @Binding var text: String
+    
+    var body: some View {
+        HStack {
+            Spacer()
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(.gray)
+                .padding(.trailing, 2)
+            TextField("Find in Entries", text: $text)
+                .padding(.vertical, 10)
+        }
+        .background(Color(.systemGray6))
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .padding(.horizontal)
+        .padding(.vertical, 2)
     }
 }
 
