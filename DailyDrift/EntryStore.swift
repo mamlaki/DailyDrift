@@ -33,6 +33,16 @@ class EntryStore: ObservableObject {
         entries.remove(atOffsets: offsets)
     }
     
+    func updateEntry(at index: Int, withTitle title: String, andContent content: String) {
+        entries[index].title = title
+        entries[index].content = content
+        
+        if let originalIndex = originalEntries.firstIndex(where: { $0.id == entries[index].id }) {
+            originalEntries[originalIndex].title = title
+            originalEntries[originalIndex].content = content
+        }
+    }
+    
     func sortByTitle() {
         entries.sort { $0.title < $1.title}
     }

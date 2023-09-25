@@ -44,7 +44,7 @@ struct ContentView: View {
                 SearchBar(text: $searchText)
                 List {
                     ForEach(filteredEntries, id: \.self) { entry in
-                        NavigationLink(destination: EntryDetailView(entry: entry)) {
+                        NavigationLink(destination: EntryDetailView(entryStore: self.entryStore, entryIndex: entryStore.entries.firstIndex(of: entry)!)) {
                             HStack {
                                 VStack(alignment: .leading) {
                                     Text(entry.title).font(.headline)
@@ -63,6 +63,7 @@ struct ContentView: View {
                                 }
                             }
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
                     .onDelete(perform: deleteEntry)
                 }
