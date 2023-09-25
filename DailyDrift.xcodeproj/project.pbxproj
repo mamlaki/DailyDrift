@@ -17,6 +17,7 @@
 		1BB691D02AC049D0008CE2FE /* NewEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691CF2AC049D0008CE2FE /* NewEntryView.swift */; };
 		1BB691D22AC04D7A008CE2FE /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691D12AC04D7A008CE2FE /* Entry.swift */; };
 		1BB691D42AC04DE7008CE2FE /* EntryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691D32AC04DE7008CE2FE /* EntryStore.swift */; };
+		1BB691D62AC1254D008CE2FE /* EntryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691D52AC1254D008CE2FE /* EntryDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		1BB691CF2AC049D0008CE2FE /* NewEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEntryView.swift; sourceTree = "<group>"; };
 		1BB691D12AC04D7A008CE2FE /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
 		1BB691D32AC04DE7008CE2FE /* EntryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryStore.swift; sourceTree = "<group>"; };
+		1BB691D52AC1254D008CE2FE /* EntryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 				1BB691CF2AC049D0008CE2FE /* NewEntryView.swift */,
 				1BB691D12AC04D7A008CE2FE /* Entry.swift */,
 				1BB691D32AC04DE7008CE2FE /* EntryStore.swift */,
+				1BB691D52AC1254D008CE2FE /* EntryDetailView.swift */,
 			);
 			path = DailyDrift;
 			sourceTree = "<group>";
@@ -266,6 +269,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BB691D62AC1254D008CE2FE /* EntryDetailView.swift in Sources */,
 				1BB691D22AC04D7A008CE2FE /* Entry.swift in Sources */,
 				1BB691D42AC04DE7008CE2FE /* EntryStore.swift in Sources */,
 				1BB691D02AC049D0008CE2FE /* NewEntryView.swift in Sources */,

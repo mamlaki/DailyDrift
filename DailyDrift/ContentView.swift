@@ -44,24 +44,25 @@ struct ContentView: View {
                 SearchBar(text: $searchText)
                 List {
                     ForEach(filteredEntries, id: \.self) { entry in
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text(entry.title).font(.headline)
-                                Text(entry.content).font(.subheadline).lineLimit(1)
-                            }
-                            
-                            Spacer()
-                            
-                            Button(action: {
-                                if let index = entryStore.entries.firstIndex(of: entry) {
-                                    entryStore.remove(at: [index])
+                        NavigationLink(destination: EntryDetailView(entry: entry)) {
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(entry.title).font(.headline)
+                                    Text(entry.content).font(.subheadline).lineLimit(1)
                                 }
-                            }) {
-                                Image(systemName: "trash")
-                                    .foregroundStyle(.red)
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                    if let index = entryStore.entries.firstIndex(of: entry) {
+                                        entryStore.remove(at: [index])
+                                    }
+                                }) {
+                                    Image(systemName: "trash")
+                                        .foregroundStyle(.red)
+                                }
                             }
                         }
-                        
                     }
                     .onDelete(perform: deleteEntry)
                 }
