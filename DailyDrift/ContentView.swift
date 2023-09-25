@@ -71,14 +71,30 @@ struct ContentView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack() {
                         Menu {
-                            Button("Recently Added (Default)", action: {
+                            Button(action: {
                                 selectedSortOption = .date
                                 entryStore.resetToDefaultOrder()
-                            })
-                            Button("Title", action: {
+                            }) {
+                                HStack {
+                                    Text("Recently Added (Default)")
+                                    Spacer()
+                                    if selectedSortOption == .date {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
+                            }
+                            Button(action: {
                                 selectedSortOption = .title
                                 entryStore.sortByTitle()
-                            })
+                            }) {
+                                HStack {
+                                    Text("Title")
+                                    Spacer()
+                                    if selectedSortOption == .title {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
+                            }
                         } label: {
                             Image(systemName: "line.3.horizontal.decrease.circle")
                         }
