@@ -22,8 +22,8 @@ class EntryStore: ObservableObject {
     }
     
     func add(_ entry: Entry) {
-        entries.append(entry)
-        originalEntries.append(entry)
+        entries.insert(entry, at: 0)
+        originalEntries.insert(entry, at: 0)
     }
     
     func remove(at offsets: IndexSet) {
@@ -35,7 +35,7 @@ class EntryStore: ObservableObject {
     }
     
     func resetToDefaultOrder() {
-        entries = originalEntries
+        entries = originalEntries.sorted(by: {$0.date > $1.date })
     }
     
     private func saveToUserDefaults() {
