@@ -166,6 +166,12 @@ struct ContentView: View {
                     Text(entry.formattedDate).font(.caption).foregroundStyle(.gray)
                 }
                 Spacer()
+                
+                if entry.isLocked {
+                    Image(systemName: "lock.fill")
+                        .foregroundStyle(.gray)
+                }
+                
                 Menu {
                     Button(action: {
                         if let index = entryStore.entries.firstIndex(of: entry) {
@@ -188,6 +194,7 @@ struct ContentView: View {
                     Image(systemName: "ellipsis.circle")
                 }
             }
+            .opacity(entry.isLocked ? 0.5 : 1)
         }
         .buttonStyle(PlainButtonStyle())
     }
@@ -212,6 +219,10 @@ struct SearchBar: View {
     }
 }
 
-#Preview {
-    ContentView()
+struct MainView3_Previews: PreviewProvider {
+    static var previews: some View {
+        MainView()
+            .environmentObject(FontManager())
+    }
 }
+
