@@ -22,6 +22,7 @@ struct ContentView: View {
     @State private var searchText = ""
     @State private var selectedDate = Date()
     @State private var isDateFilterEnabled = false
+    @State private var authenticationManager = AuthenticationManager()
     
     
     func deleteEntry(at offsets: IndexSet) {
@@ -181,6 +182,24 @@ struct ContentView: View {
                         Label(
                             entry.isPinned ? "Unpin" : "Pin",
                             systemImage: entry.isPinned ? "pin.slash" : "pin"
+                        )
+                    }
+                    Button(action: {
+                        if let index = entryStore.entries.firstIndex(of: entry) {
+                            if entryStore.entries[index].isLocked {
+                                authenticationManager.authenticate { success in
+                                    if success {
+                                        entryStore.entries[index].isLocked = false
+                                    }
+                                }
+                            } else {
+                                entryStore.entries[index].isLocked = true
+                            }
+                        }
+                    }) {
+                        Label (
+                            entry.isLocked ? "Unlock" : "Lock",
+                            systemImage: entry.isLocked ? "lock.open" : "lock"
                         )
                     }
                     Button(action: {

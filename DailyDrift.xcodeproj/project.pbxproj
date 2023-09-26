@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1B9051862AC2582600E0E73F /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 1B9051852AC2582600E0E73F /* SwiftUIX */; };
 		1B9051892AC258D600E0E73F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B9051882AC258D600E0E73F /* SwiftUI.framework */; };
+		1B90518D2AC2CEB600E0E73F /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B90518C2AC2CEB600E0E73F /* AuthenticationManager.swift */; };
 		1BB691A62AC04345008CE2FE /* DailyDriftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691A52AC04345008CE2FE /* DailyDriftApp.swift */; };
 		1BB691A82AC04345008CE2FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691A72AC04345008CE2FE /* ContentView.swift */; };
 		1BB691AA2AC04346008CE2FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BB691A92AC04346008CE2FE /* Assets.xcassets */; };
@@ -45,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		1B9051882AC258D600E0E73F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		1B90518C2AC2CEB600E0E73F /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		1BB691A22AC04345008CE2FE /* DailyDrift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DailyDrift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BB691A52AC04345008CE2FE /* DailyDriftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyDriftApp.swift; sourceTree = "<group>"; };
 		1BB691A72AC04345008CE2FE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				1BB691D92AC153A1008CE2FE /* SettingsView.swift */,
 				1BB691DB2AC1555D008CE2FE /* MainView.swift */,
 				1BB691E32AC17C6A008CE2FE /* CustomFontText.swift */,
+				1B90518C2AC2CEB600E0E73F /* AuthenticationManager.swift */,
 			);
 			path = DailyDrift;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 			files = (
 				1BB691D62AC1254D008CE2FE /* EntryDetailView.swift in Sources */,
 				1BB691DC2AC1555D008CE2FE /* MainView.swift in Sources */,
+				1B90518D2AC2CEB600E0E73F /* AuthenticationManager.swift in Sources */,
 				1BB691DA2AC153A1008CE2FE /* SettingsView.swift in Sources */,
 				1BB691D22AC04D7A008CE2FE /* Entry.swift in Sources */,
 				1BB691D82AC15226008CE2FE /* FontManager.swift in Sources */,

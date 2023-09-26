@@ -15,6 +15,7 @@ struct EntryDetailView: View {
     @State private var editedTitle: String
     @State private var editedContent: String
     @State private var isLocked = false
+    @State private var authenticationManager = AuthenticationManager()
     
     let entryIndex: Int
     
@@ -33,19 +34,10 @@ struct EntryDetailView: View {
     }
     
     func authenticate() {
-        let context = LAContext()
-        var error: NSError?
-        
-        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Unlock Entry") { success, authError in
-                DispatchQueue.main.async {
-                    if success {
-                        isLocked = false
-                    }
-                }
+        authenticationManager.authenticate { success in
+            if success {
+                isLocked = false
             }
-        } else {
-            print("Cannot evaluate policy: \(error?.localizedDescription ?? "Unknown error")")
         }
     }
     
