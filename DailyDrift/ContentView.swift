@@ -16,7 +16,7 @@ let sampleEntries : [Entry] = [
 struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var fontManager: FontManager
-    @ObservedObject var entryStore = EntryStore(entries: sampleEntries)
+    @StateObject var entryStore = EntryStore(entries: sampleEntries)
     @State private var showingNewEntryView = false
     @State private var selectedSortOption: SortOption = .date
     @State private var searchText = ""

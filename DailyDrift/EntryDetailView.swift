@@ -23,6 +23,7 @@ struct EntryDetailView: View {
         self.entryIndex = entryIndex
         self._editedTitle = State(initialValue: entryStore.entries[entryIndex].title)
         self._editedContent = State(initialValue: entryStore.entries[entryIndex].content)
+        self._isLocked = State(initialValue: entryStore.entries[entryIndex].isLocked)
     }
     
     var formattedDate: String {
@@ -39,11 +40,7 @@ struct EntryDetailView: View {
             context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Unlock Entry") { success, authError in
                 DispatchQueue.main.async {
                     if success {
-                        print("Authentication was successful.")
-                        isLocked.toggle()
-                        entryStore.entries[entryIndex].isLocked = false
-                    } else {
-                        print("Authentication failed: \(authError?.localizedDescription ?? "Unknown error")")
+                        isLocked = false
                     }
                 }
             }
@@ -89,7 +86,7 @@ struct EntryDetailView: View {
         .toolbar {
             if isEditing {
                Button(action: {
-                    entryStore.updateEntry(at: entryIndex, withTitle: editedTitle, andContent: editedContent)
+                   entryStore.updateEntry(at: entryIndex, withTitle: editedTitle, andContent: editedContent, isLocked: isLocked)
                     isEditing.toggle()
                 }) {
                     Image(systemName: "checkmark.circle")
@@ -107,7 +104,7 @@ struct EntryDetailView: View {
                         if isLocked {
                             authenticate()
                         } else {
-                            isLocked.toggle()
+                            isLocked = true
                         }
                     }) {
                         Label(isLocked ? "Unlock" : "Lock", systemImage: isLocked ? "lock.fill" : "lock.open.fill")
@@ -116,6 +113,9 @@ struct EntryDetailView: View {
                     Image(systemName: "ellipsis.circle")
                 }
             }
+        }
+        .onDisappear {
+            entryStore.updateLockStatus(at: entryIndex, isLocked: isLocked)
         }
     }
 }

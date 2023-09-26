@@ -17,13 +17,15 @@ class EntryStore: ObservableObject {
     private var originalEntries : [Entry]
     
     init(entries: [Entry] = []) {
-        self.entries = entries
-        self.originalEntries = entries
+        let loadedEntries = Self.loadFromUserDefaults() ?? entries
+        self.entries = loadedEntries
+        self.originalEntries = loadedEntries
     }
     
     func add(_ entry: Entry) {
         entries.insert(entry, at: 0)
         originalEntries.insert(entry, at: 0)
+        saveToUserDefaults()
     }
     
     func remove(at offsets: IndexSet) {
@@ -31,16 +33,29 @@ class EntryStore: ObservableObject {
             originalEntries.removeAll { $0 == entries[firstOffset] }
         }
         entries.remove(atOffsets: offsets)
+        saveToUserDefaults()
     }
     
-    func updateEntry(at index: Int, withTitle title: String, andContent content: String) {
-        entries[index].title = title
-        entries[index].content = content
+    func updateEntry(at index: Int, withTitle title: String, andContent content: String, isLocked: Bool = false) {
+        self.entries[index].title = title
+        self.entries[index].content = content
+        self.entries[index].isLocked = isLocked
         
         if let originalIndex = originalEntries.firstIndex(where: { $0.id == entries[index].id }) {
             originalEntries[originalIndex].title = title
             originalEntries[originalIndex].content = content
+            originalEntries[originalIndex].isLocked = isLocked
         }
+        print("isLocked in EntryStore: \(entries[index].isLocked)")
+        saveToUserDefaults()
+    }
+    
+    func updateLockStatus(at index: Int, isLocked: Bool) {
+        self.entries[index].isLocked = isLocked
+        if let originalIndex = originalEntries.firstIndex(where: { $0.id == entries[index].id }) {
+            self.originalEntries[originalIndex].isLocked = isLocked
+        }
+        saveToUserDefaults()
     }
     
     func sortByTitle() {
@@ -65,7 +80,7 @@ class EntryStore: ObservableObject {
         }
     }
     
-    private func loadFromUserDefaults() -> [Entry]? {
+    private static func loadFromUserDefaults() -> [Entry]? {
         if let savedEntries = UserDefaults.standard.data(forKey: "entries"),
            let decodedEntries = try? JSONDecoder().decode([Entry].self, from: savedEntries) {
             return decodedEntries
