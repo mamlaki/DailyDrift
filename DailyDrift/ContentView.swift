@@ -55,15 +55,11 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Toggle("Enable Date Filter", isOn: $isDateFilterEnabled)
-                    .padding()
-                    .animation(.easeInOut, value: isDateFilterEnabled)
-                
                 if isDateFilterEnabled {
                     DatePicker("Filter by Date:", selection: $selectedDate, displayedComponents: [.date])
                         .padding()
                         .disabled(!isDateFilterEnabled)
-                        .transition(.move(edge: .top))
+                        .transition(.asymmetric(insertion: AnyTransition.opacity.animation(.easeInOut).combined(with: .move(edge: .top)), removal: AnyTransition.opacity.animation(.easeInOut).combined(with: .move(edge: .top))))
                 }
                 
                 SearchBar(text: $searchText)
@@ -112,6 +108,13 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack() {
+                        Button(action: {
+                            withAnimation(.easeInOut) {
+                                isDateFilterEnabled.toggle()
+                            }
+                        }) {
+                            Image(systemName: isDateFilterEnabled ? "calendar.circle.fill" : "calendar.circle")
+                        }
                         Menu {
                             Button(action: {
                                 selectedSortOption = .date
