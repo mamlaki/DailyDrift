@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B9051862AC2582600E0E73F /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 1B9051852AC2582600E0E73F /* SwiftUIX */; };
+		1B9051892AC258D600E0E73F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B9051882AC258D600E0E73F /* SwiftUI.framework */; };
 		1BB691A62AC04345008CE2FE /* DailyDriftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691A52AC04345008CE2FE /* DailyDriftApp.swift */; };
 		1BB691A82AC04345008CE2FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB691A72AC04345008CE2FE /* ContentView.swift */; };
 		1BB691AA2AC04346008CE2FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BB691A92AC04346008CE2FE /* Assets.xcassets */; };
@@ -42,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1B9051882AC258D600E0E73F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		1BB691A22AC04345008CE2FE /* DailyDrift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DailyDrift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BB691A52AC04345008CE2FE /* DailyDriftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyDriftApp.swift; sourceTree = "<group>"; };
 		1BB691A72AC04345008CE2FE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -67,6 +70,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B9051892AC258D600E0E73F /* SwiftUI.framework in Frameworks */,
+				1B9051862AC2582600E0E73F /* SwiftUIX in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +92,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1B9051872AC258D600E0E73F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1B9051882AC258D600E0E73F /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		1BB691992AC04345008CE2FE = {
 			isa = PBXGroup;
 			children = (
@@ -94,6 +107,7 @@
 				1BB691B52AC04347008CE2FE /* DailyDriftTests */,
 				1BB691BF2AC04347008CE2FE /* DailyDriftUITests */,
 				1BB691A32AC04345008CE2FE /* Products */,
+				1B9051872AC258D600E0E73F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -167,6 +181,9 @@
 			dependencies = (
 			);
 			name = DailyDrift;
+			packageProductDependencies = (
+				1B9051852AC2582600E0E73F /* SwiftUIX */,
+			);
 			productName = DailyDrift;
 			productReference = 1BB691A22AC04345008CE2FE /* DailyDrift.app */;
 			productType = "com.apple.product-type.application";
@@ -239,6 +256,9 @@
 				Base,
 			);
 			mainGroup = 1BB691992AC04345008CE2FE;
+			packageReferences = (
+				1B9051842AC2582600E0E73F /* XCRemoteSwiftPackageReference "SwiftUIX" */,
+			);
 			productRefGroup = 1BB691A32AC04345008CE2FE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -614,6 +634,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1B9051842AC2582600E0E73F /* XCRemoteSwiftPackageReference "SwiftUIX" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1B9051852AC2582600E0E73F /* SwiftUIX */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B9051842AC2582600E0E73F /* XCRemoteSwiftPackageReference "SwiftUIX" */;
+			productName = SwiftUIX;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1BB6919A2AC04345008CE2FE /* Project object */;
 }

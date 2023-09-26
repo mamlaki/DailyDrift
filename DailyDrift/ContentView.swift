@@ -14,12 +14,15 @@ let sampleEntries : [Entry] = [
 ].sorted(by: { $0.date > $1.date })
 
 struct ContentView: View {
+    @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var fontManager: FontManager
+    @ObservedObject var entryStore = EntryStore(entries: sampleEntries)
     @State private var showingNewEntryView = false
     @State private var selectedSortOption: SortOption = .date
     @State private var searchText = ""
-    @ObservedObject var entryStore = EntryStore(entries: sampleEntries)
-    @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var fontManager: FontManager
+    @State private var selectedDate = Date()
+    @State private var isDateFilterEnabled = false
+    
     
     func deleteEntry(at offsets: IndexSet) {
         entryStore.remove(at: offsets)
@@ -31,11 +34,14 @@ struct ContentView: View {
     
     var filteredEntries: [Entry] {
         let nonPinnedEntries = entryStore.entries.filter { !$0.isPinned }
+        let filteredByDateEntries = isDateFilterEnabled ? nonPinnedEntries.filter {
+            Calendar.current.isDate($0.date, inSameDayAs: selectedDate)
+        } : nonPinnedEntries
         
         if searchText.isEmpty {
-            return nonPinnedEntries
+            return filteredByDateEntries
         } else {
-            return nonPinnedEntries.filter { entry in
+            return filteredByDateEntries.filter { entry in
                 entry.title.lowercased().contains(searchText.lowercased()) ||
                 entry.content.lowercased().contains(searchText.lowercased())
             }
@@ -49,7 +55,19 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
+                Toggle("Enable Date Filter", isOn: $isDateFilterEnabled)
+                    .padding()
+                    .animation(.easeInOut, value: isDateFilterEnabled)
+                
+                if isDateFilterEnabled {
+                    DatePicker("Filter by Date:", selection: $selectedDate, displayedComponents: [.date])
+                        .padding()
+                        .disabled(!isDateFilterEnabled)
+                        .transition(.move(edge: .top))
+                }
+                
                 SearchBar(text: $searchText)
+                    .animation(.easeInOut, value: isDateFilterEnabled)
                 List {
                     if !pinnedEntries.isEmpty {
                         Section(header: Text("Pinned Entries")) {
@@ -71,7 +89,7 @@ struct ContentView: View {
                         
                     }
                     
-                    Section(header: Text("All Entries")) {
+                    Section(header: Text(isDateFilterEnabled ? "Entries for \(selectedDate, style: .date)" : "All Entries")) {
                         ForEach(filteredEntries, id: \.self) { entry in
                             entryRow(for: entry)
                                 .swipeActions(edge: .leading, allowsFullSwipe: true) {
@@ -88,6 +106,7 @@ struct ContentView: View {
                         .onDelete(perform: deleteEntry)
                     }
                 }
+                .animation(.easeIn(duration: 0.3), value: filteredEntries)
             }
             .navigationTitle("DailyDrift")
             .toolbar {
