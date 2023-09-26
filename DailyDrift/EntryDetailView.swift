@@ -95,12 +95,14 @@ struct EntryDetailView: View {
                     Image(systemName: "checkmark.circle")
                 }
             } else {
-                HStack {
+                Menu {
                     Button(action: {
                         isEditing.toggle()
                     }) {
-                        Image(systemName: "square.and.pencil")
+                        Label("Edit", systemImage: "square.and.pencil")
                     }
+                    .disabled(isLocked)
+                    
                     Button(action: {
                         if isLocked {
                             authenticate()
@@ -108,10 +110,11 @@ struct EntryDetailView: View {
                             isLocked.toggle()
                         }
                     }) {
-                        Image(systemName: isLocked ? "lock.fill" : "lock.open.fill")
+                        Label(isLocked ? "Unlock" : "Lock", systemImage: isLocked ? "lock.fill" : "lock.open.fill")
                     }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
                 }
-                
             }
         }
     }
