@@ -10,6 +10,7 @@ import SwiftUI
 struct MainView: View {
     @EnvironmentObject var fontManager: FontManager
     @State private var selectedTab: Int = 0
+    @AppStorage("appearance") var appearance: Appearance = .systemDefault
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -26,6 +27,9 @@ struct MainView: View {
                     Text("Settings")
                 }
                 .tag(1)
+        }
+        .onChange(of: appearance) { newAppearance, _ in
+            print("New Appearance (MainView): \(newAppearance.rawValue)")
         }
     }
 }
