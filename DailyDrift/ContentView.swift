@@ -112,6 +112,12 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack() {
+                        Text("\(weeklyEntryCount())")
+                        Menu {
+                            Text(weeklyEntryCount() == 0 ? "No entries this week" : "\(weeklyEntryCount()) \(weeklyEntryCount() == 1 ? "entry" : "entries") this week")
+                        } label: {
+                            Image(systemName: "trophy.circle")
+                        }
                         Button(action: {
                             withAnimation(.easeInOut) {
                                 isDateFilterEnabled.toggle()
@@ -228,6 +234,16 @@ struct ContentView: View {
         }
         .buttonStyle(PlainButtonStyle())
     }
+    
+    func isEntryWithinThisWeek(date: Date) -> Bool {
+        let startOfWeek = Calendar.current.startOfDay(for: Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!)
+        
+        return date >= startOfWeek && date < Date()
+    }
+
+    func weeklyEntryCount() -> Int {
+        return entryStore.entries.filter { isEntryWithinThisWeek(date: $0.date) }.count
+    }
 }
 
 struct SearchBar: View {
@@ -248,18 +264,3 @@ struct SearchBar: View {
         .padding(.vertical, 2)
     }
 }
-
-//struct ThemeMainView_Previews: PreviewProvider {
-//    struct PreviewWrapper: View {
-//        @State private var selectedAppearance: Appearance = .light
-//        
-//        var body: some View {
-//            MainView(selectedAppearance: $selectedAppearance)
-//                .environmentObject(FontManager())
-//        }
-//    }
-//    
-//    static var previews: some View {
-//        PreviewWrapper()
-//    }
-//}
