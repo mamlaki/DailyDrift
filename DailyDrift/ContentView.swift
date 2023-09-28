@@ -104,7 +104,7 @@ struct ContentView: View {
                         .onDelete(perform: deleteEntry)
                     }
                 }
-                .themed(theme: selectedAppearance.theme(for: colorScheme))
+                .themed(theme: selectedAppearance.theme(for: colorScheme), isLight: selectedAppearance == .light || (selectedAppearance == .systemDefault && colorScheme == .light))
                 .animation(.easeIn(duration: 0.3), value: filteredEntries)
             }
             .background(selectedAppearance.theme(for: colorScheme).backgroundColor.ignoresSafeArea(.all))
