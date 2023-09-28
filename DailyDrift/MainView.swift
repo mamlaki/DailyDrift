@@ -30,7 +30,7 @@ struct MainView: View {
                         }
                         .tag(1)
                 }
-                .modifier(ThemeModifier())
+                .modifier(ThemeModifier(selectedAppearance: selectedAppearance))
                 .environment(\.theme, selectedAppearance.theme(for: colorScheme))
         
     }

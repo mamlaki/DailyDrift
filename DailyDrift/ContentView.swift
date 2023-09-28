@@ -176,7 +176,7 @@ struct ContentView: View {
     }
     
     func entryRow(for entry: Entry) -> some View {
-        NavigationLink(destination: EntryDetailView(entryStore: self.entryStore, entryIndex: entryStore.entries.firstIndex(of: entry)!)) {
+        NavigationLink(destination: EntryDetailView(entryStore: self.entryStore, entryIndex: entryStore.entries.firstIndex(of: entry)!, selectedAppearance: selectedAppearance)) {
             HStack {
                 VStack(alignment: .leading) {
                     Text(entry.title).font(.headline)

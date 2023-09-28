@@ -16,13 +16,15 @@ struct EntryDetailView: View {
     @State private var editedContent: String
     @State private var isLocked = false
     @State private var authenticationManager = AuthenticationManager()
+    @State private var selectedAppearance: Appearance
     @Environment(\.theme) var theme
     
     let entryIndex: Int
     
-    init(entryStore: EntryStore, entryIndex: Int) {
+    init(entryStore: EntryStore, entryIndex: Int, selectedAppearance: Appearance) {
         self.entryStore = entryStore
         self.entryIndex = entryIndex
+        self._selectedAppearance = State(initialValue: selectedAppearance)
         self._editedTitle = State(initialValue: entryStore.entries[entryIndex].title)
         self._editedContent = State(initialValue: entryStore.entries[entryIndex].content)
         self._isLocked = State(initialValue: entryStore.entries[entryIndex].isLocked)
@@ -81,7 +83,7 @@ struct EntryDetailView: View {
         }
         .background(theme.backgroundColor.ignoresSafeArea(.all))
         .padding()
-        .modifier(ThemeModifier())
+        .modifier(ThemeModifier(selectedAppearance: selectedAppearance))
         .navigationTitle(isEditing ? "Editing Entry" : entryStore.entries[entryIndex].title)
         .toolbar {
             if isEditing {

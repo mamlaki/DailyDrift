@@ -108,11 +108,12 @@ extension EnvironmentValues {
 
 struct ThemeModifier: ViewModifier {
     @Environment(\.theme) var theme
-
+    var selectedAppearance: Appearance
+    
     func body(content: Content) -> some View {
         content
             .background(theme.backgroundColor)
-            .foregroundStyle(theme.primaryColor)
+            .tint(selectedAppearance == .sepia ? theme.primaryColor : nil)
             .accentColor(theme.tertiaryColor)
     }
 }
