@@ -16,6 +16,7 @@ struct EntryDetailView: View {
     @State private var editedContent: String
     @State private var isLocked = false
     @State private var authenticationManager = AuthenticationManager()
+    @Environment(\.theme) var theme
     
     let entryIndex: Int
     
@@ -50,14 +51,17 @@ struct EntryDetailView: View {
                         authenticate()
                     }
                 }
+                .modifier(ThemeModifier())
             } else {
-                    if isEditing {
+                if isEditing {
                     TextField("Entry Title", text: $editedTitle)
                         .font(.headline)
                         .padding(.bottom, 10)
-                    
+                
                     TextEditor(text: $editedContent)
                         .font(.body)
+                        .background(theme.backgroundColor)
+                        .scrollContentBackground(.hidden)
                 } else {
                     
                     CustomFontText(formattedDate, style: .subheadline, customFontName: fontManager.currentFontName)
@@ -74,6 +78,7 @@ struct EntryDetailView: View {
             
         }
         .padding()
+        .modifier(ThemeModifier())
         .navigationTitle(isEditing ? "Editing Entry" : entryStore.entries[entryIndex].title)
         .toolbar {
             if isEditing {
@@ -111,11 +116,3 @@ struct EntryDetailView: View {
         }
     }
 }
-
-
-//struct MainView2_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MainView()
-//            .environmentObject(FontManager())
-//    }
-//}
