@@ -88,11 +88,11 @@ struct DarkTheme: Theme {
 
 struct SepiaTheme: Theme {
     var backgroundColor = Color(red: 245/255, green: 223/255, blue: 191/255)
-    var primaryColor = Color(red: 172/255, green: 146/255, blue: 120/255)
+    var primaryColor = Color(red: 105/255, green: 79/255, blue: 53/255)
     var secondaryColor = Color(red: 153/255, green: 127/255, blue: 101/255)
-    var tertiaryColor = Color(red: 105/255, green: 79/255, blue: 53/255)
-    var borderColor = Color(red: 153/255, green: 127/255, blue: 101/255).opacity(0.2)
-    var highlightColor = Color(red: 105/255, green: 79/255, blue: 53/255).opacity(0.2)
+    var tertiaryColor = Color(red: 172/255, green: 146/255, blue: 120/255)
+    var borderColor = Color(red: 153/255, green: 127/255, blue: 101/255).opacity(0.4)
+    var highlightColor = Color(red: 105/255, green: 79/255, blue: 53/255).opacity(0.3)
 }
 
 struct ThemeEnvironmentKey: EnvironmentKey {

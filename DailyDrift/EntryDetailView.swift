@@ -45,13 +45,15 @@ struct EntryDetailView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
             if isLocked {
-                VStack {
-                    Text("This entry is locked.")
-                    Button("Unlock with FaceID") {
-                        authenticate()
+                ZStack {
+                    theme.backgroundColor.ignoresSafeArea()
+                    VStack {
+                        Text("This entry is locked.")
+                        Button("Unlock with FaceID") {
+                            authenticate()
+                        }
                     }
                 }
-                .modifier(ThemeModifier())
             } else {
                 if isEditing {
                     TextField("Entry Title", text: $editedTitle)
@@ -77,6 +79,7 @@ struct EntryDetailView: View {
             }
             
         }
+        .background(theme.backgroundColor.ignoresSafeArea(.all))
         .padding()
         .modifier(ThemeModifier())
         .navigationTitle(isEditing ? "Editing Entry" : entryStore.entries[entryIndex].title)
