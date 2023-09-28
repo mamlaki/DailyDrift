@@ -8,35 +8,30 @@
 import SwiftUI
 
 struct MainView: View {
+    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var fontManager: FontManager
+    @Binding var selectedAppearance: Appearance
     @State private var selectedTab: Int = 0
-    @AppStorage("appearance") var appearance: Appearance = .systemDefault
     
     var body: some View {
-        TabView(selection: $selectedTab) {
-            ContentView()
-                .tabItem {
-                    Image(systemName: "house")
-                    Text("Home")
+        
+                TabView(selection: $selectedTab) {
+                    ContentView(selectedAppearance: $selectedAppearance)
+                        .tabItem {
+                            Image(systemName: "house")
+                            Text("Home")
+                        }
+                        .tag(0)
+                    
+                    SettingsView(selectedAppearance: $selectedAppearance)
+                        .tabItem {
+                            Image(systemName: "gearshape")
+                            Text("Settings")
+                        }
+                        .tag(1)
                 }
-                .tag(0)
-            
-            SettingsView()
-                .tabItem {
-                    Image(systemName: "gearshape")
-                    Text("Settings")
-                }
-                .tag(1)
-        }
-        .onChange(of: appearance) { newAppearance, _ in
-            print("New Appearance (MainView): \(newAppearance.rawValue)")
-        }
-    }
-}
-
-struct MainView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainView()
-            .environmentObject(FontManager())
+                .modifier(ThemeModifier())
+                .environment(\.theme, selectedAppearance.theme(for: colorScheme))
+        
     }
 }

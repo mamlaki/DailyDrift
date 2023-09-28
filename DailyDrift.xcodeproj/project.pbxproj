@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B8CFB752AC4F2A6003DDA70 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8CFB742AC4F2A6003DDA70 /* Theme.swift */; };
 		1B9051862AC2582600E0E73F /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 1B9051852AC2582600E0E73F /* SwiftUIX */; };
 		1B9051892AC258D600E0E73F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B9051882AC258D600E0E73F /* SwiftUI.framework */; };
 		1B90518D2AC2CEB600E0E73F /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B90518C2AC2CEB600E0E73F /* AuthenticationManager.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1B8CFB742AC4F2A6003DDA70 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		1B9051882AC258D600E0E73F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		1B90518C2AC2CEB600E0E73F /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		1BB691A22AC04345008CE2FE /* DailyDrift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DailyDrift.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,6 +141,7 @@
 				1BB691DB2AC1555D008CE2FE /* MainView.swift */,
 				1BB691E32AC17C6A008CE2FE /* CustomFontText.swift */,
 				1B90518C2AC2CEB600E0E73F /* AuthenticationManager.swift */,
+				1B8CFB742AC4F2A6003DDA70 /* Theme.swift */,
 			);
 			path = DailyDrift;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				1BB691D42AC04DE7008CE2FE /* EntryStore.swift in Sources */,
 				1BB691D02AC049D0008CE2FE /* NewEntryView.swift in Sources */,
 				1BB691A82AC04345008CE2FE /* ContentView.swift in Sources */,
+				1B8CFB752AC4F2A6003DDA70 /* Theme.swift in Sources */,
 				1BB691A62AC04345008CE2FE /* DailyDriftApp.swift in Sources */,
 				1BB691E42AC17C6A008CE2FE /* CustomFontText.swift in Sources */,
 			);

@@ -10,23 +10,35 @@ import SwiftUI
 @main
 struct DailyDriftApp: App {
     var fontManager = FontManager()
-    @AppStorage("appearance") var appearance: Appearance = .systemDefault
+    @State private var selectedAppearance: Appearance = .systemDefault
     
     var body: some Scene {
         WindowGroup {
-            MainView()
+            mainView
                 .environmentObject(fontManager)
-                .preferredColorScheme(getColorScheme(from: appearance))
         }
     }
     
-    func getColorScheme(from appearance: Appearance) -> ColorScheme? {
-        switch appearance {
+    var mainView: some View {
+        let view = MainView(selectedAppearance: $selectedAppearance)
+        
+        switch selectedAppearance {
         case .light:
-            return .light
+            return AnyView(view.preferredColorScheme(.light))
         case .dark:
+            return AnyView(view.preferredColorScheme(.dark))
+        default:
+            return AnyView(view)
+        }
+    }
+    
+    func getColorScheme(from theme: Theme) -> ColorScheme? {
+        switch theme {
+        case is LightTheme:
+            return .light
+        case is DarkTheme:
             return .dark
-        case .systemDefault:
+        default:
             return nil
         }
     }

@@ -16,6 +16,7 @@ let sampleEntries : [Entry] = [
 struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var fontManager: FontManager
+    @Environment(\.theme) var theme
     @StateObject var entryStore = EntryStore(entries: sampleEntries)
     @State private var showingNewEntryView = false
     @State private var selectedSortOption: SortOption = .date
@@ -23,8 +24,8 @@ struct ContentView: View {
     @State private var selectedDate = Date()
     @State private var isDateFilterEnabled = false
     @State private var authenticationManager = AuthenticationManager()
-    
-    
+    @Binding var selectedAppearance: Appearance
+        
     func deleteEntry(at offsets: IndexSet) {
         entryStore.remove(at: offsets)
     }
@@ -54,7 +55,7 @@ struct ContentView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 if isDateFilterEnabled {
                     DatePicker("Filter by Date:", selection: $selectedDate, displayedComponents: [.date])
@@ -103,8 +104,10 @@ struct ContentView: View {
                         .onDelete(perform: deleteEntry)
                     }
                 }
+                .themed(theme: selectedAppearance.theme(for: colorScheme))
                 .animation(.easeIn(duration: 0.3), value: filteredEntries)
             }
+            .background(selectedAppearance.theme(for: colorScheme).backgroundColor.ignoresSafeArea(.all))
             .navigationTitle("DailyDrift")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -152,10 +155,18 @@ struct ContentView: View {
                     }
                 }
             }
+            .toolbarColorScheme(
+                selectedAppearance == .systemDefault ? (colorScheme == .light ? .light : .dark) :
+                    (selectedAppearance == .light ? .light : .dark), for: .navigationBar
+            )
+            .toolbarBackground(selectedAppearance.theme(for: colorScheme).backgroundColor, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .sheet(isPresented: $showingNewEntryView) {
                 NewEntryView(entryStore: self.entryStore, isPresented: $showingNewEntryView)
             }
         }
+        
+        
     }
     
     func entryRow(for entry: Entry) -> some View {
@@ -238,10 +249,17 @@ struct SearchBar: View {
     }
 }
 
-struct MainView3_Previews: PreviewProvider {
-    static var previews: some View {
-        MainView()
-            .environmentObject(FontManager())
-    }
-}
-
+//struct ThemeMainView_Previews: PreviewProvider {
+//    struct PreviewWrapper: View {
+//        @State private var selectedAppearance: Appearance = .light
+//        
+//        var body: some View {
+//            MainView(selectedAppearance: $selectedAppearance)
+//                .environmentObject(FontManager())
+//        }
+//    }
+//    
+//    static var previews: some View {
+//        PreviewWrapper()
+//    }
+//}

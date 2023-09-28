@@ -113,9 +113,9 @@ struct EntryDetailView: View {
 }
 
 
-struct MainView2_Previews: PreviewProvider {
-    static var previews: some View {
-        MainView()
-            .environmentObject(FontManager())
-    }
-}
+//struct MainView2_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MainView()
+//            .environmentObject(FontManager())
+//    }
+//}
