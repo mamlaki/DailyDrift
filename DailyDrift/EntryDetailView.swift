@@ -22,6 +22,7 @@ struct EntryDetailView: View {
     @State private var originalContent: String
     @State private var showingDiscardConfirmation = false
     @State private var showingSaveConfirmation = false
+    @State private var lockedButtonTapped = false
         
     let entryIndex: Int
     
@@ -144,7 +145,7 @@ struct EntryDetailView: View {
                         if isLocked {
                             authenticate()
                         } else {
-                            isLocked = true
+                            lockedButtonTapped = true
                         }
                     }) {
                         Label(isLocked ? "Unlock" : "Lock", systemImage: isLocked ? "lock.fill" : "lock.open.fill")
@@ -153,6 +154,18 @@ struct EntryDetailView: View {
                     Image(systemName: "ellipsis.circle")
                 }
             }
+        }
+        .alert(isPresented: $lockedButtonTapped) {
+            Alert(
+                title: Text("Lock Entry"),
+                message: Text("Are you sure you want to lock this entry?"),
+                primaryButton: .destructive(Text("Lock")) {
+                    isLocked = true
+                },
+                secondaryButton: .cancel {
+                    lockedButtonTapped = false
+                }
+            )
         }
         .onDisappear {
             entryStore.updateLockStatus(at: entryIndex, isLocked: isLocked)
