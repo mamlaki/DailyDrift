@@ -20,6 +20,8 @@ struct EntryDetailView: View {
     @State private var selectedAppearance: Appearance
     @State private var originalTitle: String
     @State private var originalContent: String
+    @State private var showingDiscardConfirmation = false
+    @State private var showingSaveConfirmation = false
         
     let entryIndex: Int
     
@@ -92,18 +94,38 @@ struct EntryDetailView: View {
             if isEditing {
                 HStack {
                     Button(action: {
-                        editedTitle = originalTitle
-                        editedContent = originalContent
-                        isEditing.toggle()
+                        showingDiscardConfirmation = true
                     }) {
                         Image(systemName: "arrow.uturn.backward.circle")
                     }
+                    .alert(isPresented: $showingDiscardConfirmation) {
+                        Alert(
+                            title: Text("Discard Changes"),
+                            message: Text("Are you sure you want to discard your changes?"),
+                            primaryButton: .destructive(Text("Discard")) {
+                                editedTitle = originalTitle
+                                editedContent = originalContent
+                                isEditing.toggle()
+                            },
+                            secondaryButton: .cancel()
+                        )
+                    }
                     
                     Button(action: {
-                        entryStore.updateEntry(at: entryIndex, withTitle: editedTitle, andContent: editedContent, isLocked: isLocked)
-                         isEditing.toggle()
+                        showingSaveConfirmation = true
                      }) {
                          Image(systemName: "checkmark.circle")
+                     }
+                     .alert(isPresented: $showingSaveConfirmation) {
+                         Alert(
+                            title: Text("Save Changes"),
+                            message: Text("Are you sure you want to save your changes?"),
+                            primaryButton: .default(Text("Save")) {
+                                entryStore.updateEntry(at: entryIndex, withTitle: editedTitle, andContent: editedContent, isLocked: isLocked)
+                                isEditing.toggle()
+                            },
+                            secondaryButton: .cancel()
+                         )
                      }
                 }
                
