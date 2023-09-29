@@ -38,6 +38,7 @@ struct EntryDetailView: View {
     @State private var lockedButtonTapped = false
     @State private var deleteButtonTapped = false
     @State private var currentAlert: AlertType?
+    @State private var pendingDeleteAuthentication = false
         
     let entryIndex: Int
     
@@ -62,6 +63,12 @@ struct EntryDetailView: View {
         authenticationManager.authenticate { success in
             if success {
                 isLocked = false
+                if pendingDeleteAuthentication {
+                    currentAlert = .delete
+                    pendingDeleteAuthentication = false
+                }
+            } else {
+                pendingDeleteAuthentication = false
             }
         }
     }
@@ -167,7 +174,12 @@ struct EntryDetailView: View {
                     }
                     
                     Button(action: {
-                        currentAlert = .delete
+                        if isLocked {
+                            pendingDeleteAuthentication = true
+                            authenticate()
+                        } else {
+                            currentAlert = .delete
+                        }
                     }) {
                         Label("Delete", systemImage: "trash")
                     }
