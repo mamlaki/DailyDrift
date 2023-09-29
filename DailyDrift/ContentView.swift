@@ -45,7 +45,7 @@ struct ContentView: View {
     @State private var authenticationManager = AuthenticationManager()
     @State private var currentAlert: AlertType?
     @State private var currentIndex: Int?
-    
+    @State private var pendingDeleteAuthentication = false
         
     func deleteEntry(at offsets: IndexSet) {
         entryStore.remove(at: offsets)
@@ -240,7 +240,14 @@ struct ContentView: View {
                     Button(action: {
                         if let index = entryStore.entries.firstIndex(of: entry) {
                             currentIndex = index
-                            currentAlert = .delete
+                            if entry.isLocked {
+                                authenticationManager.authenticate { success in
+                                    if success {
+                                        entryStore.entries[index].isLocked = false
+                                        currentAlert = .delete
+                                    }
+                                }
+                            }
                         }
                     }) {
                         Label("Delete", systemImage: "trash")
