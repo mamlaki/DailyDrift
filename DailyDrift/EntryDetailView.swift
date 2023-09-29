@@ -9,6 +9,7 @@ import SwiftUI
 import LocalAuthentication
 
 struct EntryDetailView: View {
+    @Environment(\.theme) var theme
     @EnvironmentObject var fontManager: FontManager
     @ObservedObject var entryStore: EntryStore
     @State private var isEditing = false
@@ -17,8 +18,9 @@ struct EntryDetailView: View {
     @State private var isLocked = false
     @State private var authenticationManager = AuthenticationManager()
     @State private var selectedAppearance: Appearance
-    @Environment(\.theme) var theme
-    
+    @State private var originalTitle: String
+    @State private var originalContent: String
+        
     let entryIndex: Int
     
     init(entryStore: EntryStore, entryIndex: Int, selectedAppearance: Appearance) {
@@ -28,6 +30,8 @@ struct EntryDetailView: View {
         self._editedTitle = State(initialValue: entryStore.entries[entryIndex].title)
         self._editedContent = State(initialValue: entryStore.entries[entryIndex].content)
         self._isLocked = State(initialValue: entryStore.entries[entryIndex].isLocked)
+        self._originalTitle = State(initialValue: entryStore.entries[entryIndex].title)
+        self._originalContent = State(initialValue: entryStore.entries[entryIndex].content)
     }
     
     var formattedDate: String {
@@ -86,15 +90,28 @@ struct EntryDetailView: View {
         .navigationTitle(isEditing ? "Editing Entry" : entryStore.entries[entryIndex].title)
         .toolbar {
             if isEditing {
-               Button(action: {
-                   entryStore.updateEntry(at: entryIndex, withTitle: editedTitle, andContent: editedContent, isLocked: isLocked)
-                    isEditing.toggle()
-                }) {
-                    Image(systemName: "checkmark.circle")
+                HStack {
+                    Button(action: {
+                        editedTitle = originalTitle
+                        editedContent = originalContent
+                        isEditing.toggle()
+                    }) {
+                        Image(systemName: "arrow.uturn.backward.circle")
+                    }
+                    
+                    Button(action: {
+                        entryStore.updateEntry(at: entryIndex, withTitle: editedTitle, andContent: editedContent, isLocked: isLocked)
+                         isEditing.toggle()
+                     }) {
+                         Image(systemName: "checkmark.circle")
+                     }
                 }
+               
             } else {
                 Menu {
                     Button(action: {
+                        originalTitle = editedTitle
+                        originalContent = editedContent
                         isEditing.toggle()
                     }) {
                         Label("Edit", systemImage: "square.and.pencil")
