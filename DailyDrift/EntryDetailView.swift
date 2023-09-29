@@ -23,6 +23,7 @@ struct EntryDetailView: View {
     @State private var showingDiscardConfirmation = false
     @State private var showingSaveConfirmation = false
     @State private var lockedButtonTapped = false
+    @State private var deleteButtonTapped = false
         
     let entryIndex: Int
     
@@ -150,6 +151,12 @@ struct EntryDetailView: View {
                     }) {
                         Label(isLocked ? "Unlock" : "Lock", systemImage: isLocked ? "lock.fill" : "lock.open.fill")
                     }
+                    
+                    Button(action: {
+                        deleteButtonTapped = true
+                    }) {
+                        Label("Delete", systemImage: "trash")
+                    }
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
@@ -164,6 +171,18 @@ struct EntryDetailView: View {
                 },
                 secondaryButton: .cancel {
                     lockedButtonTapped = false
+                }
+            )
+        }
+        .alert(isPresented: $deleteButtonTapped) {
+            Alert(
+                title: Text("Delete Entry"),
+                message: Text("Are you sure you want to delete this entry? This action cannot be undone."),
+                primaryButton: .destructive(Text("Delete")) {
+                    entryStore.remove(at: IndexSet(arrayLiteral: entryIndex))
+                },
+                secondaryButton: .cancel {
+                    deleteButtonTapped = false
                 }
             )
         }
