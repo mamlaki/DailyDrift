@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 protocol Theme {
     var backgroundColor: Color { get }
@@ -120,36 +121,55 @@ struct ThemeModifier: ViewModifier {
 
 struct ThemedListModifier: ViewModifier {
     var theme: Theme
+    var selectedAppearance: Appearance
     var isLight: Bool
     
     func body(content: Content) -> some View {
-        content
-            .background(theme.backgroundColor.ignoresSafeArea(.all))
-            .scrollContentBackground(isLight ? .visible : .hidden)
-            .foregroundStyle(theme.primaryColor)
+        Group {
+            if selectedAppearance == .sepia {
+                content
+                    .background(theme.backgroundColor)
+                    .foregroundStyle(theme.primaryColor)
+                    .scrollContentBackground(isLight ? .visible : .hidden)
+            } else {
+                content
+                    .background(theme.backgroundColor)
+                    .scrollContentBackground(isLight ? .visible : .hidden)
+            }
+        }
     }
 }
 
 extension List {
-    func themed(theme: Theme, isLight: Bool) -> some View {
-        self.modifier(ThemedListModifier(theme: theme, isLight: isLight))
+    func themed(theme: Theme, selectedAppearance: Appearance, isLight: Bool) -> some View {
+        self.modifier(ThemedListModifier(theme: theme, selectedAppearance: selectedAppearance, isLight: isLight))
     }
 }
 
+
 struct ThemedFormModifier: ViewModifier {
     var theme: Theme
+    var selectedAppearance: Appearance
     var isLight: Bool
     
     func body(content: Content) -> some View {
-        content
-            .background(theme.backgroundColor.ignoresSafeArea(.all))
-            .scrollContentBackground(isLight ? .visible : .hidden)
-            .foregroundStyle(theme.primaryColor)
+        Group {
+            if selectedAppearance == .sepia {
+                content
+                    .background(theme.backgroundColor)
+                    .foregroundStyle(theme.primaryColor)
+                    .scrollContentBackground(isLight ? .visible : .hidden)
+            } else {
+                content
+                    .background(theme.backgroundColor)
+                    .scrollContentBackground(isLight ? .visible : .hidden)
+            }
+        }
     }
 }
 
 extension Form {
-    func themed(theme: Theme, isLight: Bool) -> some View {
-        self.modifier(ThemedFormModifier(theme: theme, isLight: isLight))
+    func themed(theme: Theme, selectedAppearance: Appearance, isLight: Bool) -> some View {
+        self.modifier(ThemedFormModifier(theme: theme, selectedAppearance: selectedAppearance, isLight: isLight))
     }
 }

@@ -45,7 +45,7 @@ struct EntryDetailView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
+        VStack(alignment: .leading) {
             if isLocked {
                 ZStack {
                     theme.backgroundColor.ignoresSafeArea()
@@ -77,7 +77,6 @@ struct EntryDetailView: View {
                     
                     CustomFontText(entryStore.entries[entryIndex].content, style: .body, customFontName: fontManager.currentFontName)
                 }
-                Spacer()
             }
             
         }

@@ -14,24 +14,23 @@ struct MainView: View {
     @State private var selectedTab: Int = 0
     
     var body: some View {
-        
-                TabView(selection: $selectedTab) {
-                    ContentView(selectedAppearance: $selectedAppearance)
-                        .tabItem {
-                            Image(systemName: "house")
-                            Text("Home")
-                        }
-                        .tag(0)
-                    
-                    SettingsView(selectedAppearance: $selectedAppearance)
-                        .tabItem {
-                            Image(systemName: "gearshape")
-                            Text("Settings")
-                        }
-                        .tag(1)
+        TabView(selection: $selectedTab) {
+            ContentView(selectedAppearance: $selectedAppearance)
+                .tabItem {
+                    Image(systemName: "house")
+                    Text("Home")
                 }
-                .modifier(ThemeModifier(selectedAppearance: selectedAppearance))
-                .environment(\.theme, selectedAppearance.theme(for: colorScheme))
+                .tag(0)
+            
+            SettingsView(selectedAppearance: $selectedAppearance)
+                .tabItem {
+                    Image(systemName: "gearshape")
+                    Text("Settings")
+                }
+                .tag(1)
+        }
+        .modifier(ThemeModifier(selectedAppearance: selectedAppearance))
+        .environment(\.theme, selectedAppearance.theme(for: colorScheme))
         
     }
 }

@@ -55,6 +55,6 @@ struct SettingsView: View {
               }
             }
         }
-        .themed(theme: selectedAppearance.theme(for: colorScheme), isLight: selectedAppearance == .light || (selectedAppearance == .systemDefault && colorScheme == .light))
+        .themed(theme: selectedAppearance.theme(for: colorScheme), selectedAppearance: selectedAppearance, isLight: selectedAppearance == .light || (selectedAppearance == .systemDefault && colorScheme == .light))
     }
 }

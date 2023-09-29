@@ -10,8 +10,11 @@ import SwiftUI
 struct NewEntryView: View {
     @State private var title = ""
     @State private var content = ""
+    @Binding var selectedAppearance: Appearance
     @ObservedObject var entryStore: EntryStore
     @Binding var isPresented: Bool
+    @Environment(\.theme) var theme
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         Form {
@@ -33,5 +36,5 @@ struct NewEntryView: View {
             }
             .disabled(title.isEmpty || content.isEmpty)
         }
-    }
+        .themed(theme: selectedAppearance.theme(for: colorScheme), selectedAppearance: selectedAppearance, isLight: selectedAppearance == .light || (selectedAppearance == .systemDefault && colorScheme == .light))    }
 }

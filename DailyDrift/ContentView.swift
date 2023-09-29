@@ -25,6 +25,28 @@ struct ContentView: View {
     @State private var isDateFilterEnabled = false
     @State private var authenticationManager = AuthenticationManager()
     @Binding var selectedAppearance: Appearance
+    
+    init(
+        entryStore: EntryStore = EntryStore(entries: sampleEntries),
+        showingNewEntryView: Bool = false,
+        selectedSortOption: SortOption = .date,
+        searchtext: String = "",
+        selectedAte: Date = Date(),
+        isDateFilterEnabled: Bool = false,
+        authenticationManager: AuthenticationManager = AuthenticationManager(),
+        selectedAppearance: Binding<Appearance>
+    ) {
+        self._entryStore = StateObject(wrappedValue: entryStore)
+        self._showingNewEntryView = State(initialValue: showingNewEntryView)
+        self._selectedSortOption = State(initialValue: selectedSortOption)
+        self._selectedAppearance = selectedAppearance
+        self._searchText = State(initialValue: searchText)
+        self._selectedDate = State(initialValue: selectedDate)
+        self._isDateFilterEnabled = State(initialValue: isDateFilterEnabled)
+        self._authenticationManager = State(initialValue: authenticationManager)
+        
+        print("ContentView Initialized")
+    }
         
     func deleteEntry(at offsets: IndexSet) {
         entryStore.remove(at: offsets)
@@ -104,7 +126,7 @@ struct ContentView: View {
                         .onDelete(perform: deleteEntry)
                     }
                 }
-                .themed(theme: selectedAppearance.theme(for: colorScheme), isLight: selectedAppearance == .light || (selectedAppearance == .systemDefault && colorScheme == .light))
+                .themed(theme: selectedAppearance.theme(for: colorScheme), selectedAppearance: selectedAppearance, isLight: selectedAppearance == .light || (selectedAppearance == .systemDefault && colorScheme == .light))
                 .animation(.easeIn(duration: 0.3), value: filteredEntries)
             }
             .background(selectedAppearance.theme(for: colorScheme).backgroundColor.ignoresSafeArea(.all))
@@ -168,7 +190,7 @@ struct ContentView: View {
             .toolbarBackground(selectedAppearance.theme(for: colorScheme).backgroundColor, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
             .sheet(isPresented: $showingNewEntryView) {
-                NewEntryView(entryStore: self.entryStore, isPresented: $showingNewEntryView)
+                NewEntryView(selectedAppearance: $selectedAppearance, entryStore: self.entryStore, isPresented: $showingNewEntryView)
             }
         }
         
