@@ -32,9 +32,10 @@ let sampleEntries : [Entry] = [
 ].sorted(by: { $0.date > $1.date })
 
 struct ContentView: View {
+    @Binding var selectedAppearance: Appearance
     @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var fontManager: FontManager
     @Environment(\.theme) var theme
+    @EnvironmentObject var fontManager: FontManager
     @StateObject var entryStore = EntryStore(entries: sampleEntries)
     @State private var showingNewEntryView = false
     @State private var selectedSortOption: SortOption = .date
@@ -42,7 +43,9 @@ struct ContentView: View {
     @State private var selectedDate = Date()
     @State private var isDateFilterEnabled = false
     @State private var authenticationManager = AuthenticationManager()
-    @Binding var selectedAppearance: Appearance
+    @State private var currentAlert: AlertType?
+    @State private var currentIndex: Int?
+    
         
     func deleteEntry(at offsets: IndexSet) {
         entryStore.remove(at: offsets)
@@ -217,6 +220,7 @@ struct ContentView: View {
                     }
                     Button(action: {
                         if let index = entryStore.entries.firstIndex(of: entry) {
+                            currentIndex = index
                             if entryStore.entries[index].isLocked {
                                 authenticationManager.authenticate { success in
                                     if success {
@@ -224,7 +228,7 @@ struct ContentView: View {
                                     }
                                 }
                             } else {
-                                entryStore.entries[index].isLocked = true
+                                currentAlert = .lock
                             }
                         }
                     }) {
@@ -235,13 +239,40 @@ struct ContentView: View {
                     }
                     Button(action: {
                         if let index = entryStore.entries.firstIndex(of: entry) {
-                            entryStore.remove(at: [index])
+                            currentIndex = index
+                            currentAlert = .delete
                         }
                     }) {
                         Label("Delete", systemImage: "trash")
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
+                }
+                .alert(item: $currentAlert) { alertType in
+                    switch alertType {
+                    case .lock:
+                        return Alert(
+                            title: Text("Lock Entry"),
+                            message: Text("Are you sure you wnat to lock this entry?"),
+                            primaryButton: .destructive(Text("Lock")) {
+                                if let index = currentIndex {
+                                    entryStore.entries[index].isLocked = true
+                                }
+                            },
+                            secondaryButton: .cancel()
+                        )
+                    case .delete:
+                        return Alert(
+                            title: Text("Delete Entry"),
+                            message: Text("Are you sure you want to delete this entry? This action cannot be undone."),
+                            primaryButton: .destructive(Text("Delete")) {
+                                if let index = currentIndex {
+                                    entryStore.remove(at: [index])
+                                }
+                            },
+                            secondaryButton: .cancel()
+                        )
+                    }
                 }
             }
             .opacity(entry.isLocked ? 0.5 : 1)
