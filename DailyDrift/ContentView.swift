@@ -43,30 +43,7 @@ struct ContentView: View {
     @State private var isDateFilterEnabled = false
     @State private var authenticationManager = AuthenticationManager()
     @Binding var selectedAppearance: Appearance
-    
-    init(
-        entryStore: EntryStore = EntryStore(entries: sampleEntries),
-        showingNewEntryView: Bool = false,
-        selectedSortOption: SortOption = .date,
-        searchtext: String = "",
-        selectedAte: Date = Date(),
-        isDateFilterEnabled: Bool = false,
-        authenticationManager: AuthenticationManager = AuthenticationManager(),
-        selectedAppearance: Binding<Appearance>
-    ) {
-        self._entryStore = StateObject(wrappedValue: entryStore)
-        self._showingNewEntryView = State(initialValue: showingNewEntryView)
-        self._selectedSortOption = State(initialValue: selectedSortOption)
-        self._selectedAppearance = selectedAppearance
-        self._searchText = State(initialValue: searchText)
-        self._selectedDate = State(initialValue: selectedDate)
-        self._isDateFilterEnabled = State(initialValue: isDateFilterEnabled)
-        self._authenticationManager = State(initialValue: authenticationManager)
         
-        print("ContentView Initialized")
-    }
-        
-    
     func deleteEntry(at offsets: IndexSet) {
         entryStore.remove(at: offsets)
     }

@@ -8,6 +8,19 @@
 import SwiftUI
 import LocalAuthentication
 
+enum AlertType: Identifiable {
+    case lock, delete
+    
+    var id: Int {
+        switch self {
+        case .lock:
+            return 0
+        case .delete:
+            return 1
+        }
+    }
+}
+
 struct EntryDetailView: View {
     @Environment(\.theme) var theme
     @EnvironmentObject var fontManager: FontManager
@@ -24,6 +37,7 @@ struct EntryDetailView: View {
     @State private var showingSaveConfirmation = false
     @State private var lockedButtonTapped = false
     @State private var deleteButtonTapped = false
+    @State private var currentAlert: AlertType?
         
     let entryIndex: Int
     
@@ -146,14 +160,14 @@ struct EntryDetailView: View {
                         if isLocked {
                             authenticate()
                         } else {
-                            lockedButtonTapped = true
+                            currentAlert = .lock
                         }
                     }) {
                         Label(isLocked ? "Unlock" : "Lock", systemImage: isLocked ? "lock.fill" : "lock.open.fill")
                     }
                     
                     Button(action: {
-                        deleteButtonTapped = true
+                        currentAlert = .delete
                     }) {
                         Label("Delete", systemImage: "trash")
                     }
@@ -162,29 +176,27 @@ struct EntryDetailView: View {
                 }
             }
         }
-        .alert(isPresented: $lockedButtonTapped) {
-            Alert(
-                title: Text("Lock Entry"),
-                message: Text("Are you sure you want to lock this entry?"),
-                primaryButton: .destructive(Text("Lock")) {
-                    isLocked = true
-                },
-                secondaryButton: .cancel {
-                    lockedButtonTapped = false
-                }
-            )
-        }
-        .alert(isPresented: $deleteButtonTapped) {
-            Alert(
-                title: Text("Delete Entry"),
-                message: Text("Are you sure you want to delete this entry? This action cannot be undone."),
-                primaryButton: .destructive(Text("Delete")) {
-                    entryStore.remove(at: IndexSet(arrayLiteral: entryIndex))
-                },
-                secondaryButton: .cancel {
-                    deleteButtonTapped = false
-                }
-            )
+        .alert(item: $currentAlert) { alertType in
+            switch alertType {
+            case .lock:
+                return Alert(
+                    title: Text("Lock Entry"),
+                    message: Text("Are you sure you want to lock this entry?"),
+                    primaryButton: .destructive(Text("Lock")) {
+                        isLocked = true
+                    },
+                    secondaryButton: .cancel()
+                )
+            case .delete:
+                return Alert(
+                    title: Text("Delete Entry"),
+                    message: Text("Are you sure you want to delete this entry? This action cannot be undone."),
+                    primaryButton: .destructive(Text("Delete")) {
+                        entryStore.remove(at: IndexSet(arrayLiteral: entryIndex))
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
         }
         .onDisappear {
             entryStore.updateLockStatus(at: entryIndex, isLocked: isLocked)
