@@ -45,7 +45,7 @@ struct EntryDetailView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 15) {
             if isLocked {
                 ZStack {
                     theme.backgroundColor.ignoresSafeArea()
@@ -77,10 +77,10 @@ struct EntryDetailView: View {
                     
                     CustomFontText(entryStore.entries[entryIndex].content, style: .body, customFontName: fontManager.currentFontName)
                 }
+                Spacer()
             }
-            
+            theme.backgroundColor.ignoresSafeArea()
         }
-        .background(theme.backgroundColor.ignoresSafeArea(.all))
         .padding()
         .modifier(ThemeModifier(selectedAppearance: selectedAppearance))
         .navigationTitle(isEditing ? "Editing Entry" : entryStore.entries[entryIndex].title)

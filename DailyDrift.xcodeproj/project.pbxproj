@@ -46,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1B299F002AC69E98008F7605 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		1B8CFB742AC4F2A6003DDA70 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		1B9051882AC258D600E0E73F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		1B90518C2AC2CEB600E0E73F /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
@@ -128,6 +129,7 @@
 		1BB691A42AC04345008CE2FE /* DailyDrift */ = {
 			isa = PBXGroup;
 			children = (
+				1B299F002AC69E98008F7605 /* Info.plist */,
 				1BB691A52AC04345008CE2FE /* DailyDriftApp.swift */,
 				1BB691A72AC04345008CE2FE /* ContentView.swift */,
 				1BB691A92AC04346008CE2FE /* Assets.xcassets */,
@@ -484,6 +486,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"DailyDrift/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DailyDrift/Info.plist;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "DailyDrift needs to access FaceID to lock this entry.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -513,6 +516,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"DailyDrift/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DailyDrift/Info.plist;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "DailyDrift needs to access FaceID to lock this entry.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

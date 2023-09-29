@@ -6,6 +6,24 @@
 //
 
 import SwiftUI
+import UIKit
+
+struct CustomTitleView: UIViewRepresentable {
+    var title: String
+    var color: UIColor
+    
+    func makeUIView(context: Context) -> UILabel {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        return label
+    }
+    
+    func updateUIView(_ uiView: UILabel, context: Context) {
+        uiView.text = title
+        uiView.textColor = color
+    }
+}
 
 let sampleEntries : [Entry] = [
     Entry(date: Date(timeIntervalSinceNow: -86400*6), title: "Monday Feels", content: "Just another monday... You know, today was actually not that bad. Got a ton of work done, did some hanging out with my cat, had a good meal. Overall it was a pretty great day!"),
@@ -48,6 +66,7 @@ struct ContentView: View {
         print("ContentView Initialized")
     }
         
+    
     func deleteEntry(at offsets: IndexSet) {
         entryStore.remove(at: offsets)
     }
@@ -130,8 +149,11 @@ struct ContentView: View {
                 .animation(.easeIn(duration: 0.3), value: filteredEntries)
             }
             .background(selectedAppearance.theme(for: colorScheme).backgroundColor.ignoresSafeArea(.all))
-            .navigationTitle("DailyDrift")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    CustomTitleView(title: "DailyDrift", color: UIColor(selectedAppearance.theme(for: colorScheme).primaryColor))
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack() {
                         Text("\(weeklyEntryCount())")
@@ -183,18 +205,11 @@ struct ContentView: View {
                     }
                 }
             }
-            .toolbarColorScheme(
-                selectedAppearance == .systemDefault ? (colorScheme == .light ? .light : .dark) :
-                    (selectedAppearance == .light ? .light : .dark), for: .navigationBar
-            )
             .toolbarBackground(selectedAppearance.theme(for: colorScheme).backgroundColor, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
             .sheet(isPresented: $showingNewEntryView) {
                 NewEntryView(selectedAppearance: $selectedAppearance, entryStore: self.entryStore, isPresented: $showingNewEntryView)
             }
         }
-        
-        
     }
     
     func entryRow(for entry: Entry) -> some View {
@@ -284,5 +299,12 @@ struct SearchBar: View {
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
         .padding(.horizontal)
         .padding(.vertical, 2)
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView(selectedAppearance: .constant(.light))
+            .environmentObject(FontManager())
     }
 }
