@@ -14,6 +14,7 @@ enum Appearance: String, CaseIterable, Identifiable {
     case light = "Light"
     case dark = "Dark"
     case sepia = "Sepia"
+    case grey = "Grey"
     case systemDefault = "System Default"
 }
 
@@ -26,6 +27,8 @@ extension Appearance {
             return DarkTheme()
         case .sepia:
             return SepiaTheme()
+        case .grey:
+            return GreyTheme()
         case .systemDefault:
             return DefaultTheme(colorScheme: colorScheme)
         }

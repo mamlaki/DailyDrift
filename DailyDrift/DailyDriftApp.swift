@@ -29,6 +29,8 @@ struct DailyDriftApp: App {
             return AnyView(view.preferredColorScheme(.dark))
         case .sepia:
             return AnyView(view.preferredColorScheme(.light))
+        case .grey:
+            return AnyView(view.preferredColorScheme(.dark))
         case .systemDefault:
             return AnyView(view.preferredColorScheme(.none))
         }
@@ -42,6 +44,8 @@ struct DailyDriftApp: App {
             return .dark
         case is SepiaTheme:
             return .light
+        case is GreyTheme:
+            return .dark
         case is DefaultTheme:
             return nil
         default:

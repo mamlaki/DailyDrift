@@ -96,6 +96,15 @@ struct SepiaTheme: Theme {
     var highlightColor = Color(red: 105/255, green: 79/255, blue: 53/255).opacity(0.3)
 }
 
+struct GreyTheme: Theme {
+    var backgroundColor = Color(red: 0.2, green: 0.2, blue: 0.2)
+    var primaryColor = Color.white
+    var secondaryColor = Color(red: 0.5, green: 0.5, blue: 0.5)
+    var tertiaryColor = Color(red: 0.7, green: 0.7, blue: 0.7)
+    var borderColor = Color(red: 0.8, green: 0.8, blue: 0.8)
+    var highlightColor = Color(red: 0.9, green: 0.9, blue: 0.9)
+}
+
 struct ThemeEnvironmentKey: EnvironmentKey {
     static let defaultValue: Theme = LightTheme()
 }
