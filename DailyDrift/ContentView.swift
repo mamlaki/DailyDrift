@@ -216,7 +216,7 @@ struct ContentView: View {
                 .coordinateSpace(name: "CustomCoordinateSpace")
                 .background(selectedAppearance.theme(for: colorScheme).backgroundColor.ignoresSafeArea(.all))
                 .navigationBarTitleDisplayMode(.inline)
-                .padding(.top, 300)
+                .padding(.top, 280)
                 .toolbar {
                     ToolbarItem(placement: .principal) {
                         CustomTitleView(title: "DailyDrift", color: UIColor(selectedAppearance.theme(for: colorScheme).primaryColor))
