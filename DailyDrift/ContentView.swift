@@ -31,6 +31,37 @@ let sampleEntries : [Entry] = [
     Entry(date: Date(timeIntervalSinceNow: -86400*4), title: "A Peaceful Walk", content: "Took a long walk in the park today. The birds were chirping, and a gentle breeze rustled the leaves. Felt a connection with nature that I don't get to feel as much nowadays as I used to."),
 ].sorted(by: { $0.date > $1.date })
 
+struct DraggableSeparator: View {
+    @Binding var percentage: CGFloat
+    @State private var initialPercentage: CGFloat = 0
+    
+    var body: some View {
+        Rectangle()
+            .fill(Color.gray)
+            .frame(width: UIScreen.main.bounds.width)
+            .gesture(DragGesture(coordinateSpace: .named("CustomCoordinateSpace"))
+                .onChanged { value in
+                    let dragHeight = value.startLocation.y + value.translation.height - 300
+                    let newPercentage = dragHeight / (UIScreen.main.bounds.height - 300)
+                    self.percentage = constraingPercentage(newPercentage)
+                }
+                .onEnded { value in
+                    let dragHeight = value.startLocation.y + value.translation.height - 300
+                    let newPercentage = dragHeight / (UIScreen.main.bounds.height - 300)
+                    self.percentage = constraingPercentage(newPercentage)
+                }
+            )
+    }
+    
+    func constraingPercentage(_ percentage: CGFloat) -> CGFloat {
+        let toolbarHeight: CGFloat = 50
+        let tabViewHeight: CGFloat = 300
+        let lowerBound: CGFloat = toolbarHeight / UIScreen.main.bounds.height
+        let upperBound: CGFloat = 1 - (tabViewHeight / UIScreen.main.bounds.height)
+        return min(max(percentage, lowerBound), upperBound)
+    }
+}
+
 struct ContentView: View {
     @Binding var selectedAppearance: Appearance
     @Environment(\.colorScheme) var colorScheme
@@ -48,7 +79,8 @@ struct ContentView: View {
     @State private var pendingDeleteAuthentication = false
     @State private var isEditing = false
     @State private var isEditingPinned = false
-        
+    @State private var percentage: CGFloat = 0.5
+    
     func deleteEntry(at offsets: IndexSet) {
         entryStore.remove(at: offsets)
     }
@@ -138,8 +170,13 @@ struct ContentView: View {
                         }
                         .themed(theme: selectedAppearance.theme(for: colorScheme), selectedAppearance: selectedAppearance, isLight: selectedAppearance == .light || (selectedAppearance == .systemDefault && colorScheme == .light))
                         .animation(.easeIn(duration: 0.3), value: filteredEntries)
+                        .frame(height: UIScreen.main.bounds.height * percentage)
                         .environment(\.editMode, self.editModePinned)
                     }
+                    
+                    DraggableSeparator(percentage: $percentage)
+                        .frame(height: 30)
+                    
                     List {
                         Section(header:
                             HStack {
@@ -173,10 +210,13 @@ struct ContentView: View {
                     }
                     .themed(theme: selectedAppearance.theme(for: colorScheme), selectedAppearance: selectedAppearance, isLight: selectedAppearance == .light || (selectedAppearance == .systemDefault && colorScheme == .light))
                     .animation(.easeIn(duration: 0.3), value: filteredEntries)
+                    .frame(height: UIScreen.main.bounds.height * (1 - percentage))
                     .environment(\.editMode, self.editMode)
                 }
+                .coordinateSpace(name: "CustomCoordinateSpace")
                 .background(selectedAppearance.theme(for: colorScheme).backgroundColor.ignoresSafeArea(.all))
                 .navigationBarTitleDisplayMode(.inline)
+                .padding(.top, 300)
                 .toolbar {
                     ToolbarItem(placement: .principal) {
                         CustomTitleView(title: "DailyDrift", color: UIColor(selectedAppearance.theme(for: colorScheme).primaryColor))
