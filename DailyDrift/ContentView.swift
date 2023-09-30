@@ -236,7 +236,7 @@ struct ContentView: View {
                             } label: {
                                 Image(systemName: "line.3.horizontal.decrease.circle")
                             }
-                            .disabled(isEditing)
+                            .disabled(isEditing || isEditingPinned)
                             Button(action: {
                                 showingNewEntryView = true
                             }) {
