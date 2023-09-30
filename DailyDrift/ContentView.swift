@@ -170,12 +170,14 @@ struct ContentView: View {
                         }
                         .themed(theme: selectedAppearance.theme(for: colorScheme), selectedAppearance: selectedAppearance, isLight: selectedAppearance == .light || (selectedAppearance == .systemDefault && colorScheme == .light))
                         .animation(.easeIn(duration: 0.3), value: filteredEntries)
-                        .frame(height: UIScreen.main.bounds.height * percentage)
+                        .frame(height: !pinnedEntries.isEmpty ? UIScreen.main.bounds.height * percentage : nil)
                         .environment(\.editMode, self.editModePinned)
                     }
                     
-                    DraggableSeparator(percentage: $percentage)
-                        .frame(height: 30)
+                    if !pinnedEntries.isEmpty {
+                        DraggableSeparator(percentage: $percentage)
+                            .frame(height: 30)
+                    }
                     
                     List {
                         Section(header:
@@ -210,13 +212,13 @@ struct ContentView: View {
                     }
                     .themed(theme: selectedAppearance.theme(for: colorScheme), selectedAppearance: selectedAppearance, isLight: selectedAppearance == .light || (selectedAppearance == .systemDefault && colorScheme == .light))
                     .animation(.easeIn(duration: 0.3), value: filteredEntries)
-                    .frame(height: UIScreen.main.bounds.height * (1 - percentage))
+                    .frame(height: !pinnedEntries.isEmpty ? UIScreen.main.bounds.height * (1 - percentage) : nil)
                     .environment(\.editMode, self.editMode)
                 }
                 .coordinateSpace(name: "CustomCoordinateSpace")
                 .background(selectedAppearance.theme(for: colorScheme).backgroundColor.ignoresSafeArea(.all))
                 .navigationBarTitleDisplayMode(.inline)
-                .padding(.top, 280)
+                .padding(.top, !pinnedEntries.isEmpty ? 280 : 0)
                 .toolbar {
                     ToolbarItem(placement: .principal) {
                         CustomTitleView(title: "DailyDrift", color: UIColor(selectedAppearance.theme(for: colorScheme).primaryColor))
