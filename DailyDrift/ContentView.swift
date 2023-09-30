@@ -46,13 +46,15 @@ struct ContentView: View {
     @State private var currentAlert: AlertType?
     @State private var currentIndex: Int?
     @State private var pendingDeleteAuthentication = false
+    @State private var isEditing = false
+    @State private var isEditingPinned = false
         
     func deleteEntry(at offsets: IndexSet) {
         entryStore.remove(at: offsets)
     }
     
     enum SortOption {
-        case date, title
+        case date, title, custom
     }
     
     var filteredEntries: [Entry] {
@@ -75,22 +77,84 @@ struct ContentView: View {
         return entryStore.entries.filter { $0.isPinned }
     }
     
+    var editMode: Binding<EditMode> {
+        Binding<EditMode>(
+            get: { self.isEditing ? .active : .inactive },
+            set: { self.isEditing = $0 == .active }
+        )
+    }
+    
+    var editModePinned: Binding<EditMode> {
+        Binding<EditMode>(
+            get: { self.isEditingPinned ? .active : .inactive },
+            set: { self.isEditingPinned = $0 == .active}
+        )
+    }
+    
     var body: some View {
-        NavigationStack {
-            VStack {
-                if isDateFilterEnabled {
-                    DatePicker("Filter by Date:", selection: $selectedDate, displayedComponents: [.date])
-                        .padding()
-                        .disabled(!isDateFilterEnabled)
-                        .transition(.asymmetric(insertion: AnyTransition.opacity.animation(.easeInOut).combined(with: .move(edge: .top)), removal: AnyTransition.opacity.animation(.easeInOut).combined(with: .move(edge: .top))))
-                }
-                
-                SearchBar(text: $searchText)
-                    .animation(.easeInOut, value: isDateFilterEnabled)
-                List {
+        NavigationView {
+            NavigationStack {
+                VStack {
+                    if isDateFilterEnabled {
+                        DatePicker("Filter by Date:", selection: $selectedDate, displayedComponents: [.date])
+                            .padding()
+                            .disabled(!isDateFilterEnabled)
+                            .transition(.asymmetric(insertion: AnyTransition.opacity.animation(.easeInOut).combined(with: .move(edge: .top)), removal: AnyTransition.opacity.animation(.easeInOut).combined(with: .move(edge: .top))))
+                    }
+                    
+                    SearchBar(text: $searchText)
+                        .animation(.easeInOut, value: isDateFilterEnabled)
                     if !pinnedEntries.isEmpty {
-                        Section(header: Text("Pinned Entries")) {
-                            ForEach(pinnedEntries, id: \.self) { entry in
+                        List {
+                            Section(header:
+                                HStack {
+                                    Text("Pinned Entries")
+                                    Button(action: {
+                                        withAnimation {
+                                            self.isEditingPinned.toggle()
+                                        }
+                                    }) {
+                                        Image(systemName: self.isEditingPinned ? "pencil.circle.fill" : "pencil.circle")
+                                    }
+                                }
+                                .disabled(self.selectedSortOption != .custom)
+                            ) {
+                                ForEach(pinnedEntries, id: \.self) { entry in
+                                    entryRow(for: entry)
+                                        .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                                            Button(action: {
+                                                if let index = entryStore.entries.firstIndex(of: entry) {
+                                                    entryStore.entries[index].isPinned.toggle()
+                                                }
+                                            }) {
+                                                Label("Unpin", systemImage: "pin.slash")
+                                            }
+                                            .tint((colorScheme == .light ? Color.yellow : Color.orange))
+                                        }
+                                }
+                                .onDelete(perform: deleteEntry)
+                                .onMove(perform: entryStore.movePinned)
+                            }
+                        }
+                        .themed(theme: selectedAppearance.theme(for: colorScheme), selectedAppearance: selectedAppearance, isLight: selectedAppearance == .light || (selectedAppearance == .systemDefault && colorScheme == .light))
+                        .animation(.easeIn(duration: 0.3), value: filteredEntries)
+                        .environment(\.editMode, self.editModePinned)
+                    }
+                    List {
+                        Section(header:
+                            HStack {
+                                Text(isDateFilterEnabled ? "Entries for \(selectedDate, style: .date)" : "All Entries")
+                                Button(action: {
+                                    withAnimation {
+                                        self.isEditing.toggle()
+                                    }
+                                }) {
+                                    Image(systemName: self.isEditing ? "pencil.circle.fill" : "pencil.circle")
+                                }
+                                .disabled(self.selectedSortOption != .custom)
+                            }
+                        ) {
+                            ForEach(filteredEntries, id: \.self) { entry in
                                 entryRow(for: entry)
                                     .swipeActions(edge: .leading, allowsFullSwipe: true) {
                                         Button(action: {
@@ -98,98 +162,95 @@ struct ContentView: View {
                                                 entryStore.entries[index].isPinned.toggle()
                                             }
                                         }) {
-                                            Label("Unpin", systemImage: "pin.slash")
+                                            Label("Pin", systemImage: "pin")
                                         }
                                         .tint((colorScheme == .light ? Color.yellow : Color.orange))
                                     }
                             }
                             .onDelete(perform: deleteEntry)
+                            .onMove(perform: entryStore.move)
                         }
-                        
                     }
-                    
-                    Section(header: Text(isDateFilterEnabled ? "Entries for \(selectedDate, style: .date)" : "All Entries")) {
-                        ForEach(filteredEntries, id: \.self) { entry in
-                            entryRow(for: entry)
-                                .swipeActions(edge: .leading, allowsFullSwipe: true) {
-                                    Button(action: {
-                                        if let index = entryStore.entries.firstIndex(of: entry) {
-                                            entryStore.entries[index].isPinned.toggle()
+                    .themed(theme: selectedAppearance.theme(for: colorScheme), selectedAppearance: selectedAppearance, isLight: selectedAppearance == .light || (selectedAppearance == .systemDefault && colorScheme == .light))
+                    .animation(.easeIn(duration: 0.3), value: filteredEntries)
+                    .environment(\.editMode, self.editMode)
+                }
+                .background(selectedAppearance.theme(for: colorScheme).backgroundColor.ignoresSafeArea(.all))
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        CustomTitleView(title: "DailyDrift", color: UIColor(selectedAppearance.theme(for: colorScheme).primaryColor))
+                    }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        HStack() {
+                            Text("\(weeklyEntryCount())")
+                            Menu {
+                                Text(weeklyEntryCount() == 0 ? "No entries this week" : "\(weeklyEntryCount()) \(weeklyEntryCount() == 1 ? "entry" : "entries") this week")
+                            } label: {
+                                Image(systemName: "trophy.circle")
+                            }
+                            Button(action: {
+                                withAnimation(.easeInOut) {
+                                    isDateFilterEnabled.toggle()
+                                }
+                            }) {
+                                Image(systemName: isDateFilterEnabled ? "calendar.circle.fill" : "calendar.circle")
+                            }
+                            Menu {
+                                Button(action: {
+                                    selectedSortOption = .date
+                                    entryStore.resetToDefaultOrder()
+                                }) {
+                                    HStack {
+                                        Text("Recently Added (Default)")
+                                        Spacer()
+                                        if selectedSortOption == .date {
+                                            Image(systemName: "checkmark")
                                         }
-                                    }) {
-                                        Label("Pin", systemImage: "pin")
-                                    }
-                                    .tint((colorScheme == .light ? Color.yellow : Color.orange))
-                                }
-                        }
-                        .onDelete(perform: deleteEntry)
-                    }
-                }
-                .themed(theme: selectedAppearance.theme(for: colorScheme), selectedAppearance: selectedAppearance, isLight: selectedAppearance == .light || (selectedAppearance == .systemDefault && colorScheme == .light))
-                .animation(.easeIn(duration: 0.3), value: filteredEntries)
-            }
-            .background(selectedAppearance.theme(for: colorScheme).backgroundColor.ignoresSafeArea(.all))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    CustomTitleView(title: "DailyDrift", color: UIColor(selectedAppearance.theme(for: colorScheme).primaryColor))
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    HStack() {
-                        Text("\(weeklyEntryCount())")
-                        Menu {
-                            Text(weeklyEntryCount() == 0 ? "No entries this week" : "\(weeklyEntryCount()) \(weeklyEntryCount() == 1 ? "entry" : "entries") this week")
-                        } label: {
-                            Image(systemName: "trophy.circle")
-                        }
-                        Button(action: {
-                            withAnimation(.easeInOut) {
-                                isDateFilterEnabled.toggle()
-                            }
-                        }) {
-                            Image(systemName: isDateFilterEnabled ? "calendar.circle.fill" : "calendar.circle")
-                        }
-                        Menu {
-                            Button(action: {
-                                selectedSortOption = .date
-                                entryStore.resetToDefaultOrder()
-                            }) {
-                                HStack {
-                                    Text("Recently Added (Default)")
-                                    Spacer()
-                                    if selectedSortOption == .date {
-                                        Image(systemName: "checkmark")
                                     }
                                 }
+                                Button(action: {
+                                    selectedSortOption = .title
+                                    entryStore.sortByTitle()
+                                }) {
+                                    HStack {
+                                        Text("Title")
+                                        Spacer()
+                                        if selectedSortOption == .title {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
+                                }
+                                Button(action: {
+                                    selectedSortOption = .custom
+                                    entryStore.resetToCustomOrder()
+                                }) {
+                                    HStack {
+                                        Text("Custom")
+                                        Spacer()
+                                        if (selectedSortOption == .custom) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
+                                }
+                            } label: {
+                                Image(systemName: "line.3.horizontal.decrease.circle")
                             }
                             Button(action: {
-                                selectedSortOption = .title
-                                entryStore.sortByTitle()
+                                showingNewEntryView = true
                             }) {
-                                HStack {
-                                    Text("Title")
-                                    Spacer()
-                                    if selectedSortOption == .title {
-                                        Image(systemName: "checkmark")
-                                    }
-                                }
+                                Image(systemName: "plus")
                             }
-                        } label: {
-                            Image(systemName: "line.3.horizontal.decrease.circle")
-                        }
-                        Button(action: {
-                            showingNewEntryView = true
-                        }) {
-                            Image(systemName: "plus")
                         }
                     }
                 }
-            }
-            .toolbarBackground(selectedAppearance.theme(for: colorScheme).backgroundColor, for: .navigationBar)
-            .sheet(isPresented: $showingNewEntryView) {
-                NewEntryView(selectedAppearance: $selectedAppearance, entryStore: self.entryStore, isPresented: $showingNewEntryView)
+                .toolbarBackground(selectedAppearance.theme(for: colorScheme).backgroundColor, for: .navigationBar)
+                .sheet(isPresented: $showingNewEntryView) {
+                    NewEntryView(selectedAppearance: $selectedAppearance, entryStore: self.entryStore, isPresented: $showingNewEntryView)
+                }
             }
         }
+
     }
     
     func entryRow(for entry: Entry) -> some View {
@@ -281,6 +342,7 @@ struct ContentView: View {
                         )
                     }
                 }
+               
             }
             .opacity(entry.isLocked ? 0.5 : 1)
         }

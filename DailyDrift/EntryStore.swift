@@ -15,11 +15,13 @@ class EntryStore: ObservableObject {
     }
     
     private var originalEntries : [Entry]
+    private var customorderEntries: [Entry]
     
     init(entries: [Entry] = []) {
         let loadedEntries = Self.loadFromUserDefaults() ?? entries
         self.entries = loadedEntries
         self.originalEntries = loadedEntries
+        self.customorderEntries = loadedEntries
     }
     
     func add(_ entry: Entry) {
@@ -72,6 +74,49 @@ class EntryStore: ObservableObject {
         for index in entries.indices {
             entries[index].isPinned = currentPinStatuses[entries[index].id] ?? false
         }
+    }
+    
+    func resetToCustomOrder() {
+        let currentPinStatuses = Dictionary(uniqueKeysWithValues: entries.map { ($0.id, $0.isPinned) })
+        entries = customorderEntries
+        for index in entries.indices {
+            entries[index].isPinned = currentPinStatuses[entries[index].id] ?? false
+        }
+    }
+    
+    func move(fromt source: IndexSet, to destination: Int) {
+        var nonPinnedEntries = entries.filter { !$0.isPinned }
+        nonPinnedEntries.move(fromOffsets: source, toOffset: destination)
+        
+        var currentIndex = 0
+        
+        for (index, entry) in entries.enumerated() {
+            if !entry.isPinned {
+                entries[index] = nonPinnedEntries[currentIndex]
+                currentIndex += 1
+            }
+        }
+        
+        customorderEntries = entries
+        originalEntries = entries
+    }
+    
+    func movePinned(from source: IndexSet, to destination: Int) {
+        var pinnedEntries = entries.filter { $0.isPinned }
+        pinnedEntries.move(fromOffsets: source, toOffset: destination)
+        
+        var currentIndex = 0
+        
+        for (index, entry) in entries.enumerated() {
+            if entry.isPinned {
+                entries[index] = pinnedEntries[currentIndex]
+                currentIndex += 1
+            }
+        }
+
+        customorderEntries = entries
+        originalEntries = entries
+        
     }
     
     private func saveToUserDefaults() {
